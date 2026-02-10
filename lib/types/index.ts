@@ -1,0 +1,88 @@
+/**
+ * Type definitions for Kenyan Student Diary App
+ * Defines all data structures used throughout the application
+ */
+
+// Student profile information
+export interface StudentDetails {
+  id: string;
+  name: string;
+  nemisNumber: string;
+  admissionNumber: string;
+  class: string;
+  schoolName: string;
+  term: string;
+  year: number;
+}
+
+// Attendance record
+export interface AttendanceRecord {
+  id: string;
+  date: string;
+  present: boolean;
+  reason?: string;
+  teacherName: string;
+}
+
+// Learning progress (CBC - Competency Based Curriculum)
+export interface LearningProgress {
+  id: string;
+  learningArea: string;
+  skill: string;
+  progress: 'Good' | 'Fair' | 'Needs Support';
+  teacherComment: string;
+}
+
+// Homework record
+export interface HomeworkRecord {
+  id: string;
+  subject: string;
+  homeworkGiven: string;
+  dueDate: string;
+  completed: boolean;
+  parentSignature: boolean;
+}
+
+// Behaviour monitoring record
+export interface BehaviourRecord {
+  id: string;
+  date: string;
+  behaviourObserved: string;
+  actionTaken: string;
+  teacherComment: string;
+  parentComment?: string;
+}
+
+// Teacher-Parent communication note
+export interface TeacherNote {
+  id: string;
+  date: string;
+  from: 'teacher' | 'parent';
+  subject: string;
+  message: string;
+  read: boolean;
+}
+
+// Term summary
+export interface TermSummary {
+  academics: string;
+  behaviour: string;
+  attendance: string;
+  overallRemarks: string;
+}
+
+// Complete diary data structure
+export interface DiaryData {
+  studentDetails: StudentDetails;
+  attendance: AttendanceRecord[];
+  learningProgress: LearningProgress[];
+  homework: HomeworkRecord[];
+  behaviour: BehaviourRecord[];
+  teacherNotes: TeacherNote[];
+  termSummary?: TermSummary;
+}
+
+// Sample/preview diary data
+export interface SampleDiaryData extends DiaryData {
+  isSample: boolean;
+}
