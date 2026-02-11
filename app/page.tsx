@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { LandingPage } from '@/components/sections/LandingPage';
 import { DiaryPreview } from '@/components/sections/DiaryPreview';
 import { DiaryEditor } from '@/components/sections/DiaryEditor';
-import { sampleDiaryData, academicDiarySampleData } from '@/lib/sample-data';
+import { academicDiarySampleData } from '@/lib/sample-data';
 
 // Page state enum for navigation
 type PageState = 'landing' | 'preview' | 'editor';

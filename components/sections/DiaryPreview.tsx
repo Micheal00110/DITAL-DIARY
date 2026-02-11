@@ -9,7 +9,7 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Download, Printer } from 'lucide-react';
-import { AcademicDiaryData, WeeklyScheduleEntry, SchoolDetails, StudentDetails, TeacherRemarks, ParentSignature } from '@/lib/types';
+import { AcademicDiaryData } from '@/lib/types';
 import { SchoolHeader } from '@/components/diary/SchoolHeader';
 import { StudentDetailsCard } from '@/components/diary/StudentDetailsCard';
 import { WeeklyScheduleTable } from '@/components/diary/WeeklyScheduleTable';

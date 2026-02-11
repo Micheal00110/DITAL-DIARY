@@ -3,7 +3,7 @@
  * Shows what a completed diary looks like
  */
 
-import { DiaryData, AcademicDiaryData, SampleDiaryData } from './types';
+import { AcademicDiaryData, SampleDiaryData } from './types';
 
 export const sampleDiaryData: SampleDiaryData = {
   isSample: true,
