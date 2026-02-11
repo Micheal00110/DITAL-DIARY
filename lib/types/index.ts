@@ -86,3 +86,52 @@ export interface DiaryData {
 export interface SampleDiaryData extends DiaryData {
   isSample: boolean;
 }
+
+// ===== NEW ACADEMIC DIARY STRUCTURE =====
+
+// School information
+export interface SchoolDetails {
+  name: string;
+  address: string;
+  phone: string;
+  email: string;
+  logo?: string; // Optional logo URL or path
+}
+
+// Weekly academic schedule entry
+export interface WeeklyScheduleEntry {
+  id: string;
+  date: string; // Format: "MON 10/02" or similar
+  dayOfWeek: string; // "MON", "TUE", etc.
+  subject: string; // "MATHEMATICS", "ENGLISH", etc.
+  lessonTopics: string[]; // Array of lesson topics/points
+  homework: string; // Homework description
+  homeworkDue?: string; // Due date for homework
+}
+
+// Teacher remarks and signature
+export interface TeacherRemarks {
+  remarks: string;
+  teacherName: string;
+  signature?: string;
+  date: string;
+}
+
+// Parent/Guardian signature
+export interface ParentSignature {
+  signature?: string;
+  date: string;
+}
+
+// Complete academic diary data
+export interface AcademicDiaryData {
+  schoolDetails: SchoolDetails;
+  studentDetails: StudentDetails;
+  weeklySchedule: WeeklyScheduleEntry[];
+  teacherRemarks?: TeacherRemarks;
+  parentSignature?: ParentSignature;
+  verified: boolean; // Whether the diary has been verified
+  weekNumber?: number; // Week number in the term
+  pageNumber?: number; // Page number for multi-page diaries
+}
+

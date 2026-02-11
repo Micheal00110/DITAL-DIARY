@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { LandingPage } from '@/components/sections/LandingPage';
 import { DiaryPreview } from '@/components/sections/DiaryPreview';
 import { DiaryEditor } from '@/components/sections/DiaryEditor';
-import { sampleDiaryData } from '@/lib/sample-data';
+import { sampleDiaryData, academicDiarySampleData } from '@/lib/sample-data';
 
 // Page state enum for navigation
 type PageState = 'landing' | 'preview' | 'editor';
@@ -47,7 +47,7 @@ export default function Home() {
       {/* Preview Page - Read-only sample diary */}
       {currentPage === 'preview' && (
         <DiaryPreview
-          data={sampleDiaryData}
+          data={academicDiarySampleData}
           onBack={handleBackToHome}
         />
       )}

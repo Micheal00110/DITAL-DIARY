@@ -3,7 +3,7 @@
  * Shows what a completed diary looks like
  */
 
-import type { SampleDiaryData } from './types';
+import { DiaryData, AcademicDiaryData, SampleDiaryData } from './types';
 
 export const sampleDiaryData: SampleDiaryData = {
   isSample: true,
@@ -173,3 +173,101 @@ export const sampleDiaryData: SampleDiaryData = {
       'John is a capable student with good potential. With continued support from home and school, he will make excellent progress.',
   },
 };
+
+export const academicDiarySampleData: AcademicDiaryData = {
+  schoolDetails: {
+    name: "ST. PETER'S SECONDARY SCHOOL",
+    address: 'P.O. BOX 12345, NAIROBI',
+    phone: '0712-345678',
+    email: 'info@stpeters.ac.ke',
+  },
+  studentDetails: {
+    id: 's1',
+    name: 'WANJIRU KAMAU',
+    class: 'FORM 3 EAST',
+    admissionNumber: '2023/0456',
+    term: 'TERM 1, 2026',
+    year: 2026,
+    nemisNumber: '',
+    schoolName: "ST. PETER'S SECONDARY SCHOOL",
+  },
+  weeklySchedule: [
+    {
+      id: 'w1',
+      dayOfWeek: 'MON',
+      date: '10/02',
+      subject: 'MATHEMATICS',
+      lessonTopics: [
+        'Quadratic Equations',
+        'Completing the square',
+        'Factorization method',
+        'Formula application',
+      ],
+      homework: 'Exercise 4.2\nPage 156\nQuestions 1-10\nDue: 12/02/26',
+    },
+    {
+      id: 'w2',
+      dayOfWeek: 'MON',
+      date: '10/02',
+      subject: 'ENGLISH',
+      lessonTopics: [
+        'Literature:',
+        '"The River and the Source"',
+        "Chapter 5: Akoko's Journey",
+        'Themes: Determination, Culture',
+      ],
+      homework: 'Essay: "My Village"\nMin. 450 words\n2 pages\nDue: 13/02/26',
+    },
+    {
+      id: 'w3',
+      dayOfWeek: 'TUE',
+      date: '11/02',
+      subject: 'KISWAHILI',
+      lessonTopics: [
+        'Insha: Sherehe ya Harus',
+        '• Utangulizi (Introduction)',
+        '• Kiini (Body)',
+        '• Hitimisho (Conclusion)',
+      ],
+      homework: 'Andika insha\nkamili\nKurasa 2\nDue: 14/02/26',
+    },
+    {
+      id: 'w4',
+      dayOfWeek: 'TUE',
+      date: '11/02',
+      subject: 'BIOLOGY',
+      lessonTopics: [
+        'Human Digestive System',
+        '• Alimentary canal parts',
+        '• Enzyme functions',
+        '• Practical: Diagram labeling',
+      ],
+      homework: 'Revise Chapter 7\nDraw & label\nfull diagram\nTest Friday',
+    },
+    {
+      id: 'w5',
+      dayOfWeek: 'WED',
+      date: '12/02',
+      subject: 'CHEMISTRY',
+      lessonTopics: [
+        'Acids, Bases and Salts',
+        '• pH scale (0-14)',
+        '• Indicators: Litmus, phenolphthalein',
+        '• Practical experiment done',
+      ],
+      homework: 'Read Ch. 6\nAnswer Q 1-8\nPage 89\nDue: 15/02/26',
+    },
+  ],
+  teacherRemarks: {
+    remarks: 'Wanjiru demonstrates excellent understanding of concepts. Keep up the good work!',
+    teacherName: 'Mr. Maina',
+    date: '12/02/26',
+  },
+  parentSignature: {
+    signature: 'Kamau M.',
+    date: '13/02/26',
+  },
+  verified: true,
+  weekNumber: 1,
+};
+

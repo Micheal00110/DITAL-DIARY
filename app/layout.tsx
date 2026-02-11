@@ -11,13 +11,13 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
-    default: 'Kenyan Student Diary - Digital School Diary',
-    template: '%s | Kenyan Student Diary',
+    default: '***STUDENT DIARY*** - Kenyan Digital School Diary',
+    template: '%s | ***STUDENT DIARY***',
   },
   description:
-    'A simple, table-based digital student diary for Kenyan schools. Track attendance, learning progress, homework, and behavior. No login required.',
+    'TRANSPARENCY - A simple, table-based digital student diary for Kenyan schools. Track attendance, learning progress, homework, and behavior. No login required.',
   keywords: [
-    'student diary',
+    '***STUDENT DIARY***',
     'school diary',
     'Kenya',
     'attendance tracking',
@@ -29,30 +29,31 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_KE',
     url: 'https://kenyan-student-diary.app',
-    siteName: 'Kenyan Student Diary',
-    title: 'Kenyan Student Diary - Digital School Diary',
-    description: 'Simple digital student diary for Kenyan schools. No login required.',
+    siteName: '***STUDENT DIARY*** - Kenyan Student Diary',
+    title: '***STUDENT DIARY*** - TRANSPARENCY',
+    description: 'TRANSPARENCY - Simple digital student diary for Kenyan schools. No login required.',
     images: [
       {
-        url: '/og-image.png',
+        url: '/diary-logo.svg',
         width: 1200,
         height: 630,
-        alt: 'Kenyan Student Diary',
+        alt: 'Student Diary - Transparency',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Kenyan Student Diary',
-    description: 'Simple digital student diary for Kenyan schools',
-    images: ['/og-image.png'],
+    title: '***STUDENT DIARY*** - TRANSPARENCY',
+    description: 'TRANSPARENCY - Simple digital student diary for Kenyan schools',
+    images: ['/diary-logo.svg'],
   },
   robots: {
     index: true,
     follow: true,
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: '/diary-logo.svg',
+    apple: '/diary-logo.svg',
   },
 };
 
