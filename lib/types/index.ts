@@ -3,6 +3,8 @@
  * Defines all data structures used throughout the application
  */
 
+import type { ProgressLevel, CommunicationDirection } from './enums';
+
 // Student profile information
 export interface StudentDetails {
   id: string;
@@ -13,6 +15,7 @@ export interface StudentDetails {
   schoolName: string;
   term: string;
   year: number;
+  photo?: string; // Optional photo URL or path
 }
 
 // Attendance record
@@ -29,7 +32,7 @@ export interface LearningProgress {
   id: string;
   learningArea: string;
   skill: string;
-  progress: 'Good' | 'Fair' | 'Needs Support';
+  progress: ProgressLevel;
   teacherComment: string;
 }
 
@@ -57,7 +60,7 @@ export interface BehaviourRecord {
 export interface TeacherNote {
   id: string;
   date: string;
-  from: 'teacher' | 'parent';
+  from: CommunicationDirection;
   subject: string;
   message: string;
   read: boolean;

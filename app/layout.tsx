@@ -4,10 +4,12 @@
  */
 
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Caveat } from 'next/font/google';
 import './globals.css';
+import { cn } from '@/lib/utils';
 
 const inter = Inter({ subsets: ['latin'] });
+const caveat = Caveat({ subsets: ['latin'], variable: '--font-handwriting' });
 
 export const metadata: Metadata = {
   title: {
@@ -64,7 +66,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-white text-gray-900`}>
+      <body className={cn(inter.className, caveat.variable, 'bg-white text-gray-900')}>
         {/* Main content wrapper */}
         <div className="min-h-screen flex flex-col">
           {children}

@@ -7,35 +7,36 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Download, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Download, RotateCcw, AlertCircle } from 'lucide-react';
 import { AcademicDiaryData, WeeklyScheduleEntry, SchoolDetails, StudentDetails, TeacherRemarks, ParentSignature } from '@/lib/types';
 import { SchoolHeader } from '@/components/diary/SchoolHeader';
 import { StudentDetailsCard } from '@/components/diary/StudentDetailsCard';
-import { WeeklyScheduleTable } from '@/components/diary/WeeklyScheduleTable';
+import { WeeklyDiaryLayout } from '@/components/diary/WeeklyDiaryLayout';
 import { SignatureSections } from '@/components/diary/SignatureSections';
 import { academicDiarySampleData } from '@/lib/sample-data';
+import { cn } from '@/lib/utils';
+import { 
+  STORAGE_KEYS, 
+  AUTO_SAVE_DELAY, 
+  DEFAULT_SCHOOL_DETAILS, 
+  DEFAULT_STUDENT_DETAILS,
+  STATUS_STYLES,
+  STATUS_TEXT,
+  ERROR_MESSAGES,
+  SUCCESS_MESSAGES,
+  PRINT_CONFIG
+} from '@/lib/constants';
+import { DayOfWeek } from '@/lib/types/enums';
+import { getFromStorage, setToStorage } from '@/lib/storage';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 interface DiaryEditorProps {
   onBack: () => void;
 }
 
 const DEFAULT_ACADEMIC_DATA: AcademicDiaryData = {
-  schoolDetails: {
-    name: 'MY SCHOOL NAME',
-    address: 'P.O. BOX 00000, CITY',
-    phone: '000-000000',
-    email: 'info@myschool.ac.ke',
-  },
-  studentDetails: {
-    id: '1',
-    name: '',
-    nemisNumber: '',
-    admissionNumber: '',
-    class: '',
-    schoolName: '',
-    term: 'TERM 1, 2026',
-    year: 2026,
-  },
+  schoolDetails: DEFAULT_SCHOOL_DETAILS,
+  studentDetails: DEFAULT_STUDENT_DETAILS,
   weeklySchedule: [],
   verified: false,
 };
@@ -43,25 +44,39 @@ const DEFAULT_ACADEMIC_DATA: AcademicDiaryData = {
 export function DiaryEditor({ onBack }: DiaryEditorProps) {
   const [diaryData, setDiaryData] = useState<AcademicDiaryData>(DEFAULT_ACADEMIC_DATA);
   const [isSaved, setIsSaved] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Load from localStorage
   useEffect(() => {
-    const savedData = localStorage.getItem('academicDiaryData');
-    if (savedData) {
-      try {
-        setDiaryData(JSON.parse(savedData));
-      } catch (e) {
-        console.error('Error loading academic diary data:', e);
+    try {
+      const savedData = getFromStorage<AcademicDiaryData>('ACADEMIC_DIARY_DATA', DEFAULT_ACADEMIC_DATA);
+      if (savedData) {
+        setDiaryData(savedData);
       }
+    } catch (e) {
+      const errorMsg = e instanceof Error ? e.message : ERROR_MESSAGES.LOAD_DATA;
+      setError(errorMsg);
+      console.error(ERROR_MESSAGES.LOAD_DATA, e);
     }
   }, []);
 
   // Auto-save
   useEffect(() => {
     const timer = setTimeout(() => {
-      localStorage.setItem('academicDiaryData', JSON.stringify(diaryData));
-      setIsSaved(true);
-    }, 1000);
+      try {
+        const success = setToStorage('ACADEMIC_DIARY_DATA', diaryData);
+        if (success) {
+          setIsSaved(true);
+          setError(null);
+        } else {
+          setError(ERROR_MESSAGES.SAVE_DATA);
+        }
+      } catch (e) {
+        setError(ERROR_MESSAGES.SAVE_DATA);
+        console.error(ERROR_MESSAGES.SAVE_DATA, e);
+      }
+    }, AUTO_SAVE_DELAY);
+    
     return () => clearTimeout(timer);
   }, [diaryData]);
 
@@ -76,7 +91,7 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
   const handleUpdateStudent = (field: keyof StudentDetails, value: string | number) => {
     setDiaryData(prev => ({
       ...prev,
-      studentDetails: { ...prev.studentDetails, [field]: value }
+      studentDetails: { ...prev.studentDetails, [field]: value as any }
     }));
     setIsSaved(false);
   };
@@ -84,7 +99,29 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
   const addScheduleEntry = () => {
     const newEntry: WeeklyScheduleEntry = {
       id: Date.now().toString(),
-      dayOfWeek: 'MON',
+      dayOfWeek: DayOfWeek.MONDAY,
+      date: '',
+      subject: '',
+      lessonTopics: [],
+      homework: '',
+    };
+    setDiaryData(prev => ({
+      ...prev,
+      weeklySchedule: [...prev.weeklySchedule, newEntry]
+    }));
+    setIsSaved(false);
+  };
+
+  const addEntryForDay = (dayOfWeek: string) => {
+    // Check if entry already exists for this day
+    const existingEntry = diaryData.weeklySchedule.find(entry => entry.dayOfWeek === dayOfWeek);
+    if (existingEntry) {
+      return; // Entry already exists
+    }
+
+    const newEntry: WeeklyScheduleEntry = {
+      id: Date.now().toString(),
+      dayOfWeek: dayOfWeek as DayOfWeek,
       date: '',
       subject: '',
       lessonTopics: [],
@@ -132,23 +169,56 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
   };
 
   const loadSampleData = () => {
-    if (confirm('Load sample data? This will overwrite your current entries.')) {
-      setDiaryData(academicDiarySampleData);
-      setIsSaved(false);
+    const confirmed = window.confirm(ERROR_MESSAGES.CONFIRM_LOAD_SAMPLE);
+    if (confirmed) {
+      try {
+        setDiaryData(academicDiarySampleData);
+        setIsSaved(false);
+        setError(null);
+      } catch (e) {
+        setError('Failed to load sample data');
+        console.error('Error loading sample data:', e);
+      }
     }
   };
 
   // Basic PDF export simulation
   const exportToPDF = () => {
-    window.print();
+    try {
+      window.print();
+    } catch (e) {
+      setError('Failed to open print dialog');
+      console.error('Error opening print dialog:', e);
+    }
   };
+
+  const clearError = () => setError(null);
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8 print:p-0">
       <div className="max-w-5xl mx-auto bg-white shadow-xl min-h-[1100px] flex flex-col print:shadow-none">
         
+        {/* Error Alert */}
+        {error && (
+          <Alert variant="destructive" className="m-4 border-red-300">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription className="mt-2 flex items-center justify-between">
+              <span>{error}</span>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={clearError}
+                className="ml-2"
+              >
+                Dismiss
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+        
         {/* Editor Controls (Hidden during print) */}
-        <div className="p-4 border-b bg-gray-50 flex items-center justify-between print:hidden">
+        <div className={cn('p-4 border-b bg-gray-50 flex items-center justify-between', PRINT_CONFIG.HIDE_DURING_PRINT)}>
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" onClick={onBack}>
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -166,8 +236,8 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
               <Download className="w-4 h-4 mr-2" />
               Print / PDF
             </Button>
-            <div className={`text-xs px-2 py-1 rounded ${isSaved ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
-              {isSaved ? '✓ Saved' : 'Saving...'}
+            <div className={cn('text-xs px-2 py-1 rounded', isSaved ? STATUS_STYLES.SAVED : STATUS_STYLES.SAVING)}>
+              {isSaved ? STATUS_TEXT.SAVED : STATUS_TEXT.SAVING}
             </div>
           </div>
         </div>
@@ -186,12 +256,14 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
             onUpdate={handleUpdateStudent}
           />
           
-          <WeeklyScheduleTable 
+          <WeeklyDiaryLayout 
             entries={diaryData.weeklySchedule}
             editable={true}
             onAdd={addScheduleEntry}
+            onAddEntry={addEntryForDay}
             onUpdate={updateScheduleEntry}
             onDelete={deleteScheduleEntry}
+            weekNumber={diaryData.weekNumber}
           />
           
           <SignatureSections 
@@ -211,7 +283,7 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
       </div>
       
       {/* Visual Instruction (Hidden during print) */}
-      <div className="max-w-5xl mx-auto mt-4 text-center text-gray-500 text-sm print:hidden">
+      <div className={cn('max-w-5xl mx-auto mt-4 text-center text-gray-500 text-sm', PRINT_CONFIG.HIDE_DURING_PRINT)}>
         <p>Tip: Click on fields to edit. Changes are saved automatically.</p>
       </div>
     </div>

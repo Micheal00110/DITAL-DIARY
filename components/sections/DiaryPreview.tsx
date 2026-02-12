@@ -12,7 +12,7 @@ import { ArrowLeft, Download, Printer } from 'lucide-react';
 import { AcademicDiaryData } from '@/lib/types';
 import { SchoolHeader } from '@/components/diary/SchoolHeader';
 import { StudentDetailsCard } from '@/components/diary/StudentDetailsCard';
-import { WeeklyScheduleTable } from '@/components/diary/WeeklyScheduleTable';
+import { WeeklyDiaryLayout } from '@/components/diary/WeeklyDiaryLayout';
 import { SignatureSections } from '@/components/diary/SignatureSections';
 import { academicDiarySampleData } from '@/lib/sample-data';
 
@@ -78,9 +78,11 @@ export function DiaryPreview({ data, onBack }: DiaryPreviewProps) {
             editable={false}
           />
           
-          <WeeklyScheduleTable 
+          <WeeklyDiaryLayout 
             entries={displayData.weeklySchedule}
             editable={false}
+            onAddEntry={() => {}}
+            weekNumber={displayData.weekNumber}
           />
           
           <SignatureSections 

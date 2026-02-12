@@ -8,9 +8,13 @@
 
 import { useState } from 'react';
 import { LandingPage } from '@/components/sections/LandingPage';
-import { DiaryPreview } from '@/components/sections/DiaryPreview';
 import { DiaryEditor } from '@/components/sections/DiaryEditor';
 import { academicDiarySampleData } from '@/lib/sample-data';
+import { BookletContainer } from '@/components/booklet/BookletContainer';
+import { BookletCover } from '@/components/booklet/BookletCover';
+import { TermDatesPage } from '@/components/booklet/TermDatesPage';
+import { LearnerDetailsPage } from '@/components/booklet/LearnerDetailsPage';
+import { WeeklyDiaryPage } from '@/components/booklet/WeeklyDiaryPage';
 
 // Page state enum for navigation
 type PageState = 'landing' | 'preview' | 'editor';
@@ -44,12 +48,30 @@ export default function Home() {
         />
       )}
 
-      {/* Preview Page - Read-only sample diary */}
+      {/* Preview Page - Interactive Booklet */}
       {currentPage === 'preview' && (
-        <DiaryPreview
-          data={academicDiarySampleData}
-          onBack={handleBackToHome}
-        />
+        <div className="min-h-screen bg-slate-200">
+          <BookletContainer onBack={handleBackToHome}>
+            <BookletCover />
+            <TermDatesPage />
+            <LearnerDetailsPage />
+            <WeeklyDiaryPage 
+              entries={[
+                { day: "Monday / Jumatatu", date: "" },
+                { day: "Tuesday / Jumanne", date: "" },
+                { day: "Wednesday / Jumatano", date: "" },
+              ]}
+            />
+            <WeeklyDiaryPage 
+              isEvenPage={true}
+              entries={[
+                { day: "Thursday / Alhamisi", date: "" },
+                { day: "Friday / Ijumaa", date: "" },
+                { day: "Saturday / Jumamosi", date: "" },
+              ]}
+            />
+          </BookletContainer>
+        </div>
       )}
 
       {/* Editor Page - Editable diary for user input */}

@@ -117,8 +117,59 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-slate-200 text-foreground antialiased;
   }
+}
+
+/* Booklet Redesign Styles */
+.paper-texture {
+  background-color: #fcfcf9;
+  background-image: linear-gradient(
+    rgba(227, 242, 253, 0.4) 1px,
+    transparent 1px
+  );
+  background-size: 100% 2rem;
+}
+
+.book-shadow {
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.11),
+    0 2px 2px rgba(0, 0, 0, 0.11),
+    0 4px 4px rgba(0, 0, 0, 0.11),
+    0 8px 8px rgba(0, 0, 0, 0.11),
+    0 16px 16px rgba(0, 0, 0, 0.11);
+}
+
+.page-fold {
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.01) 3%,
+    transparent 100%
+  );
+}
+
+.spine-shadow {
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.05) 50%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+}
+
+/* Handwriting Font Simulation */
+.font-handwriting {
+  font-family: var(--font-handwriting), cursive;
+  color: #104e8b; /* Accurate blue ink color from photos */
+  letter-spacing: -0.02em;
+}
+
+/* Dotted underline for form fields */
+.dotted-line {
+  border-bottom: 2px dotted #94a3b8;
+  display: inline-block;
+  min-width: 50px;
 }
 
 /*

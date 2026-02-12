@@ -12,6 +12,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { BookOpen, Eye, LogIn, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface LandingPageProps {
   onPreview: () => void;
@@ -110,7 +111,7 @@ export function LandingPage({ onPreview, onOpenDiary }: LandingPageProps) {
                   placeholder="Enter full name"
                   value={studentDetails.name}
                   onChange={(e) => handleInputChange('name', e.target.value)}
-                  className={`mt-1 ${errors.name ? 'border-red-500' : ''}`}
+                  className={cn('mt-1', errors.name && 'border-red-500')}
                 />
                 {errors.name && (
                   <p className="text-red-500 text-sm mt-1">{errors.name}</p>
@@ -128,7 +129,7 @@ export function LandingPage({ onPreview, onOpenDiary }: LandingPageProps) {
                   placeholder="e.g., Form 1, Grade 5"
                   value={studentDetails.class}
                   onChange={(e) => handleInputChange('class', e.target.value)}
-                  className={`mt-1 ${errors.class ? 'border-red-500' : ''}`}
+                  className={cn('mt-1', errors.class && 'border-red-500')}
                 />
                 {errors.class && (
                   <p className="text-red-500 text-sm mt-1">{errors.class}</p>
@@ -146,7 +147,7 @@ export function LandingPage({ onPreview, onOpenDiary }: LandingPageProps) {
                   placeholder="Enter admission number"
                   value={studentDetails.admissionNumber}
                   onChange={(e) => handleInputChange('admissionNumber', e.target.value)}
-                  className={`mt-1 ${errors.admissionNumber ? 'border-red-500' : ''}`}
+                  className={cn('mt-1', errors.admissionNumber && 'border-red-500')}
                 />
                 {errors.admissionNumber && (
                   <p className="text-red-500 text-sm mt-1">{errors.admissionNumber}</p>

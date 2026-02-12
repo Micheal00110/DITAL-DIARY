@@ -4,6 +4,7 @@
  */
 
 import { AcademicDiaryData, SampleDiaryData } from './types';
+import { ProgressLevel, CommunicationDirection } from './types/enums';
 
 export const sampleDiaryData: SampleDiaryData = {
   isSample: true,
@@ -55,35 +56,35 @@ export const sampleDiaryData: SampleDiaryData = {
       id: '1',
       learningArea: 'Literacy and Language',
       skill: 'Reading Comprehension',
-      progress: 'Good',
+      progress: ProgressLevel.GOOD,
       teacherComment: 'Excellent progress. John reads fluently and understands stories well.',
     },
     {
       id: '2',
       learningArea: 'Literacy and Language',
       skill: 'Writing Skills',
-      progress: 'Fair',
+      progress: ProgressLevel.FAIR,
       teacherComment: 'Needs to improve handwriting and spelling. Keep practicing.',
     },
     {
       id: '3',
       learningArea: 'Numeracy',
       skill: 'Addition and Subtraction',
-      progress: 'Good',
+      progress: ProgressLevel.GOOD,
       teacherComment: 'Strong understanding of basic operations. Ready for multiplication.',
     },
     {
       id: '4',
       learningArea: 'Science and Technology',
       skill: 'Observation Skills',
-      progress: 'Good',
+      progress: ProgressLevel.GOOD,
       teacherComment: 'Very curious and asks good questions during science lessons.',
     },
     {
       id: '5',
       learningArea: 'Social Studies',
       skill: 'Community Awareness',
-      progress: 'Fair',
+      progress: ProgressLevel.FAIR,
       teacherComment: 'Participates in discussions but needs to listen more to others.',
     },
   ],
@@ -149,7 +150,7 @@ export const sampleDiaryData: SampleDiaryData = {
     {
       id: '1',
       date: '2024-01-12',
-      from: 'teacher',
+      from: CommunicationDirection.TEACHER,
       subject: 'Progress Update',
       message:
         'John is settling well into Grade 4. He is a bright student with good potential. Please encourage him to practice writing at home.',
@@ -158,7 +159,7 @@ export const sampleDiaryData: SampleDiaryData = {
     {
       id: '2',
       date: '2024-01-11',
-      from: 'parent',
+      from: CommunicationDirection.PARENT,
       subject: 'Homework Concern',
       message:
         'John seems to struggle with the social studies homework. Can you provide more guidance on what is expected?',
