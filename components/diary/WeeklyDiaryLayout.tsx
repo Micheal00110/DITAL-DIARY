@@ -102,11 +102,11 @@ export function WeeklyDiaryLayout({
   return (
     <div className="w-full">
       {/* Header Area */}
-      <div className="mb-4 flex justify-between items-baseline border-b border-[#104e8b]/30 pb-1">
-        <h2 className="text-xl font-[900] text-[#104e8b]">{term} (Week {weekNumber})</h2>
-        <div className="flex items-center gap-1 text-[10px] font-bold text-[#5cc5f2]">
+      <div className="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-baseline border-b border-[#104e8b]/30 pb-1 gap-2">
+        <h2 className="text-lg sm:text-xl font-[900] text-[#104e8b] text-center sm:text-left">{term} (Week {weekNumber})</h2>
+        <div className="flex items-center gap-1 text-[9px] sm:text-[10px] font-bold text-[#5cc5f2] justify-center sm:justify-start">
           <span className="italic">Date:</span>
-          <span className="dotted-line w-24 border-[#5cc5f2]/40"></span>
+          <span className="dotted-line w-16 sm:w-24 border-[#5cc5f2]/40"></span>
         </div>
       </div>
 
@@ -119,40 +119,42 @@ export function WeeklyDiaryLayout({
           return (
             <div key={idx} className="relative pb-4 border-b border-blue-50 last:border-0">
               {/* Day Header with Hand Icon */}
-              <div className="flex items-center gap-2 mb-2">
-                <h3 className="text-[#104e8b] font-black text-[13px] italic min-w-[140px]">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+                <h3 className="text-[#104e8b] font-black text-[11px] sm:text-[13px] italic min-w-[120px] sm:min-w-[140px]">
                   {dayName}
                 </h3>
-                <HandIcon className="w-5 h-5 opacity-80" />
-                {editable && (
-                  <Input
-                    type="text"
-                    value={dayData.date}
-                    onChange={(e) => {
-                      const dayEntry = getOrCreateEntryForDay(dayKey);
-                      if (dayEntry.id.startsWith('temp-')) {
-                        // Create new entry when user starts typing
-                        handleAddEntryForDay(dayKey);
-                        // The entry will be created, then we can update it
-                        setTimeout(() => {
-                          const newEntry = entries.find(entry => entry.dayOfWeek === dayKey);
-                          if (newEntry && onUpdate) {
-                            onUpdate(newEntry.id, 'date', e.target.value);
-                          }
-                        }, 100);
-                      } else if (onUpdate) {
-                        onUpdate(dayEntry.id, 'date', e.target.value);
-                      }
-                    }}
-                    placeholder="Add date"
-                    className="h-6 text-xs w-24 border-0 border-b border-dotted border-[#5cc5f2]/40 rounded-none focus:ring-0 focus:border-[#5cc5f2]/60"
-                  />
-                )}
+                <div className="flex items-center gap-2">
+                  <HandIcon className="w-4 h-4 sm:w-5 sm:h-5 opacity-80" />
+                  {editable && (
+                    <Input
+                      type="text"
+                      value={dayData.date}
+                      onChange={(e) => {
+                        const dayEntry = getOrCreateEntryForDay(dayKey);
+                        if (dayEntry.id.startsWith('temp-')) {
+                          // Create new entry when user starts typing
+                          handleAddEntryForDay(dayKey);
+                          // The entry will be created, then we can update it
+                          setTimeout(() => {
+                            const newEntry = entries.find(entry => entry.dayOfWeek === dayKey);
+                            if (newEntry && onUpdate) {
+                              onUpdate(newEntry.id, 'date', e.target.value);
+                            }
+                          }, 100);
+                        } else if (onUpdate) {
+                          onUpdate(dayEntry.id, 'date', e.target.value);
+                        }
+                      }}
+                      placeholder="Add date"
+                      className="h-5 sm:h-6 text-[10px] sm:text-xs w-16 sm:w-24 border-0 border-b border-dotted border-[#5cc5f2]/40 rounded-none focus:ring-0 focus:border-[#5cc5f2]/60"
+                    />
+                  )}
+                </div>
               </div>
 
               {/* Subjects and Topics - Allow direct input */}
               {editable ? (
-                <div className="ml-6 space-y-2">
+                <div className="ml-2 sm:ml-6 space-y-2">
                   {dayData.subjects.length > 0 ? (
                     dayData.subjects.map((subject: any) => (
                       <div key={subject.id} className="space-y-1">
@@ -161,14 +163,14 @@ export function WeeklyDiaryLayout({
                             type="text"
                             value={subject.name.replace(' [AYE]', '').replace(' [NO]', '').replace('[AYE]', '').replace('[NO]', '')}
                             onChange={(e) => onUpdate?.(subject.id, 'subject', e.target.value)}
-                            className="h-6 text-sm border-0 border-b border-dotted border-gray-400 rounded-none focus:ring-0 focus:border-green-600 px-0"
+                            className="h-5 sm:h-6 text-[10px] sm:text-sm border-0 border-b border-dotted border-gray-400 rounded-none focus:ring-0 focus:border-green-600 px-0"
                           />
                         </div>
-                        <div className="ml-4 text-xs space-y-1">
+                        <div className="ml-2 sm:ml-4 text-xs space-y-1">
                           <Textarea
                             value={subject.topics.join('\n')}
                             onChange={(e) => handleLessonTopicsChange(subject.id, e.target.value)}
-                            className="text-xs border-0 border-b border-dotted border-gray-300 rounded-none focus:ring-0 focus:border-gray-500 px-0 min-h-[40px] resize-none"
+                            className="text-[10px] sm:text-xs border-0 border-b border-dotted border-gray-300 rounded-none focus:ring-0 focus:border-gray-500 px-0 min-h-[32px] sm:min-h-[40px] resize-none"
                             rows={2}
                             placeholder="Lesson topics..."
                           />
@@ -192,7 +194,7 @@ export function WeeklyDiaryLayout({
                             }, 100);
                           }
                         }}
-                        className="h-6 text-sm border-0 border-b border-dotted border-gray-400 rounded-none focus:ring-0 focus:border-green-600 px-0 text-green-700 uppercase"
+                        className="h-5 sm:h-6 text-[10px] sm:text-sm border-0 border-b border-dotted border-gray-400 rounded-none focus:ring-0 focus:border-green-600 px-0 text-green-700 uppercase"
                       />
                       <Textarea
                         placeholder="Lesson topics..."
@@ -207,7 +209,7 @@ export function WeeklyDiaryLayout({
                             }, 100);
                           }
                         }}
-                        className="text-xs border-0 border-b border-dotted border-gray-300 rounded-none focus:ring-0 focus:border-gray-500 px-0 min-h-[40px] resize-none ml-4"
+                        className="text-[10px] sm:text-xs border-0 border-b border-dotted border-gray-300 rounded-none focus:ring-0 focus:border-gray-500 px-0 min-h-[32px] sm:min-h-[40px] resize-none ml-2 sm:ml-4"
                         rows={2}
                       />
                     </div>
@@ -246,10 +248,10 @@ export function WeeklyDiaryLayout({
               )}
 
               {/* Homework Section - Allow direct input */}
-              <div className="ml-6 mt-2">
+              <div className="ml-2 sm:ml-6 mt-2">
                 {editable ? (
                   <>
-                    <div className="text-xs font-semibold text-red-700 mb-1">HOMEWORK:</div>
+                    <div className="text-[10px] sm:text-xs font-semibold text-red-700 mb-1">HOMEWORK:</div>
                     <Textarea
                       value={dayData.homework}
                       onChange={(e) => {
@@ -268,15 +270,15 @@ export function WeeklyDiaryLayout({
                         }
                       }}
                       placeholder="Add homework..."
-                      className="text-xs border-0 border-b border-dotted border-red-300 rounded-none focus:ring-0 focus:border-red-500 px-0 min-h-[40px] resize-none"
+                      className="text-[10px] sm:text-xs border-0 border-b border-dotted border-red-300 rounded-none focus:ring-0 focus:border-red-500 px-0 min-h-[32px] sm:min-h-[40px] resize-none"
                       rows={2}
                     />
                   </>
                 ) : (
                   dayData.homework && (
                     <>
-                      <div className="text-xs font-semibold text-red-700 mb-1">HOMEWORK:</div>
-                      <div className="text-xs whitespace-pre-line text-red-600">
+                      <div className="text-[10px] sm:text-xs font-semibold text-red-700 mb-1">HOMEWORK:</div>
+                      <div className="text-[10px] sm:text-xs whitespace-pre-line text-red-600">
                         {dayData.homework}
                       </div>
                     </>
@@ -285,9 +287,9 @@ export function WeeklyDiaryLayout({
               </div>
 
               {/* Aye or No Section */}
-              <div className="mt-4 flex justify-center gap-8 px-2">
+              <div className="mt-4 flex justify-center gap-4 sm:gap-8 px-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-[8px] font-black text-[#104e8b]/60 uppercase">Aye</span>
+                  <span className="text-[7px] sm:text-[8px] font-black text-[#104e8b]/60 uppercase">Aye</span>
                   {editable ? (
                     <input
                       type="checkbox"
@@ -334,7 +336,7 @@ export function WeeklyDiaryLayout({
                 </div>
                 
                 <div className="flex items-center gap-2">
-                  <span className="text-[8px] font-black text-[#104e8b]/60 uppercase">No</span>
+                  <span className="text-[7px] sm:text-[8px] font-black text-[#104e8b]/60 uppercase">No</span>
                   {editable ? (
                     <input
                       type="checkbox"
@@ -405,22 +407,22 @@ export function WeeklyDiaryLayout({
       </div>
 
       {/* Weekly Summary Section */}
-      <div className="mt-4 pt-4 border-t-2 border-[#104e8b]/20 bg-blue-50/10 p-4 rounded-sm">
+      <div className="mt-4 pt-4 border-t-2 border-[#104e8b]/20 bg-blue-50/10 p-3 sm:p-4 rounded-sm">
          <div className="grid grid-cols-1 gap-4">
-            <div className="space-y-4 font-black">
-               <h4 className="text-[11px] text-[#104e8b] uppercase border-b border-[#104e8b] inline-block mb-1">WEEKLY SUMMARY</h4>
+            <div className="space-y-3 sm:space-y-4 font-black">
+               <h4 className="text-[10px] sm:text-[11px] text-[#104e8b] uppercase border-b border-[#104e8b] inline-block mb-1">WEEKLY SUMMARY</h4>
                
                <div className="grid grid-cols-1 gap-3">
-                  <div className="flex items-center justify-center gap-8">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
                      <div className="flex items-center gap-2">
-                        <span className="text-[9px] text-[#104e8b] uppercase font-black">Total Ayes:</span>
-                        <span className="text-[12px] font-bold text-[#104e8b]">
+                        <span className="text-[8px] sm:text-[9px] text-[#104e8b] uppercase font-black">Total Ayes:</span>
+                        <span className="text-[11px] sm:text-[12px] font-bold text-[#104e8b]">
                            {entries.filter(entry => entry.subject?.includes('[AYE]')).length}
                         </span>
                      </div>
                      <div className="flex items-center gap-2">
-                        <span className="text-[9px] text-[#104e8b] uppercase font-black">Total Nos:</span>
-                        <span className="text-[12px] font-bold text-[#104e8b]">
+                        <span className="text-[8px] sm:text-[9px] text-[#104e8b] uppercase font-black">Total Nos:</span>
+                        <span className="text-[11px] sm:text-[12px] font-bold text-[#104e8b]">
                            {entries.filter(entry => entry.subject?.includes('[NO]')).length}
                         </span>
                      </div>
@@ -428,7 +430,7 @@ export function WeeklyDiaryLayout({
                   
                   {editable && (
                      <div className="flex items-baseline gap-2">
-                        <span className="text-[9px] text-[#104e8b] uppercase">Weekly Notes:</span>
+                        <span className="text-[8px] sm:text-[9px] text-[#104e8b] uppercase">Weekly Notes:</span>
                         <div className="flex-1 border-b border-dotted border-[#104e8b]/30"></div>
                      </div>
                   )}
@@ -444,7 +446,7 @@ export function WeeklyDiaryLayout({
             onClick={onAdd}
             variant="outline"
             size="sm"
-            className="border-green-600 text-green-700 hover:bg-green-50"
+            className="border-green-600 text-green-700 hover:bg-green-50 w-full sm:w-auto"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Entry

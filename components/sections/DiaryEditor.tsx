@@ -195,8 +195,8 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
   const clearError = () => setError(null);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 md:p-8 print:p-0">
-      <div className="max-w-5xl mx-auto bg-white shadow-xl min-h-[1100px] flex flex-col print:shadow-none">
+    <div className="min-h-screen bg-gray-100 p-2 sm:p-4 md:p-6 lg:p-8 print:p-0">
+      <div className="max-w-4xl sm:max-w-5xl mx-auto bg-white shadow-xl min-h-[800px] sm:min-h-[1100px] flex flex-col print:shadow-none">
         
         {/* Error Alert */}
         {error && (
@@ -218,23 +218,24 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
         )}
         
         {/* Editor Controls (Hidden during print) */}
-        <div className={cn('p-4 border-b bg-gray-50 flex items-center justify-between', PRINT_CONFIG.HIDE_DURING_PRINT)}>
-          <div className="flex items-center gap-4">
+        <div className={cn('p-3 sm:p-4 border-b bg-gray-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3', PRINT_CONFIG.HIDE_DURING_PRINT)}>
+          <div className="flex items-center gap-2 sm:gap-4">
             <Button variant="ghost" size="sm" onClick={onBack}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
+              <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="text-sm">Back</span>
             </Button>
-            <h1 className="text-lg font-bold">Academic Diary Editor</h1>
+            <h1 className="text-base sm:text-lg font-bold">Academic Diary Editor</h1>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-2">
             <Button variant="outline" size="sm" onClick={loadSampleData}>
-              <RotateCcw className="w-4 h-4 mr-2" />
-              Load Sample
+              <RotateCcw className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="text-sm">Load Sample</span>
             </Button>
             <Button variant="outline" size="sm" onClick={exportToPDF}>
-              <Download className="w-4 h-4 mr-2" />
-              Print / PDF
+              <Download className="w-4 h-4 mr-1 sm:mr-2" />
+              <span className="text-sm hidden sm:inline">Print / PDF</span>
+              <span className="text-sm sm:hidden">PDF</span>
             </Button>
             <div className={cn('text-xs px-2 py-1 rounded', isSaved ? STATUS_STYLES.SAVED : STATUS_STYLES.SAVING)}>
               {isSaved ? STATUS_TEXT.SAVED : STATUS_TEXT.SAVING}
@@ -243,7 +244,7 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
         </div>
 
         {/* The Diary Document Area */}
-        <div className="flex-1 p-6 md:p-10 space-y-0">
+        <div className="flex-1 p-3 sm:p-6 md:p-8 lg:p-10 space-y-0">
           <SchoolHeader 
             schoolDetails={diaryData.schoolDetails} 
             editable={true}
