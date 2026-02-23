@@ -28,7 +28,7 @@ export const DEFAULT_STUDENT_DETAILS = {
   admissionNumber: '',
   class: '',
   schoolName: '',
-  term: 'TERM 1, 2026',
+  term: 'Term One',
   year: 2026,
   photo: '', // Optional photo URL
 } as const;

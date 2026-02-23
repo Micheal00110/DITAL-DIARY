@@ -18,15 +18,6 @@ interface WeeklyDiaryPageProps {
   entries?: DayEntry[];
 }
 
-// Custom Hand Icon based on physical diary
-const HandIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    <path d="M14 6L16 8L10 14H8V12L14 6Z" fill="#104e8b" />
-    <path d="M7 11.5V17H12.5L20 9.5L17.5 7L10 14.5V11.5H7Z" stroke="#104e8b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M3 17C3 17 5 17 6 18C7 19 8 19 8 19" stroke="#104e8b" strokeWidth="1.5" strokeLinecap="round" />
-  </svg>
-);
-
 export function WeeklyDiaryPage({ 
   term = "Term Three", 
   week = 13,
@@ -55,12 +46,11 @@ export function WeeklyDiaryPage({
       <div className="flex-1 space-y-4">
         {entries.map((entry, idx) => (
           <div key={idx} className="relative pb-4 border-b border-blue-50 last:border-0">
-            {/* Day Header with Correct Hand Icon */}
+            {/* Day Header */}
             <div className="flex items-center gap-2 mb-2">
               <h3 className="text-[#104e8b] font-black text-[13px] italic min-w-[140px]">
                 {entry.day}
               </h3>
-              <HandIcon className="w-5 h-5 opacity-80" />
             </div>
 
             {/* Writing Lines: Blue and subtle */}

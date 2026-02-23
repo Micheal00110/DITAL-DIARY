@@ -11,10 +11,10 @@ interface BookletCoverProps {
 }
 
 export function BookletCover({ 
-  studentName = "Zanny Imani Karan", 
-  campus = "Ngong Road", 
-  grade = "5M", 
-  year = "2026" 
+  studentName = "", 
+  campus = "", 
+  grade = "", 
+  year = "" 
 }: BookletCoverProps) {
   return (
     <div className="h-full bg-white flex flex-col relative font-sans overflow-hidden border-r-4 border-blue-900/10">

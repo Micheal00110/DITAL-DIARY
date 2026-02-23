@@ -270,5 +270,30 @@ export const academicDiarySampleData: AcademicDiaryData = {
   },
   verified: true,
   weekNumber: 1,
+  learningProgress: [
+    {
+      id: 'lp1',
+      learningArea: 'Mathematics',
+      skill: 'Algebraic Equations',
+      progress: ProgressLevel.GOOD,
+      teacherComment: 'Excellent understanding of quadratic expressions.',
+    },
+    {
+      id: 'lp2',
+      learningArea: 'Literature',
+      skill: 'Thematic Analysis',
+      progress: ProgressLevel.FAIR,
+      teacherComment: 'Needs to work on relating themes to context.',
+    },
+  ],
+  behaviour: [
+    {
+      id: 'b1',
+      date: '10/02/26',
+      behaviourObserved: 'Active participation in group work',
+      actionTaken: 'Praised for leadership',
+      teacherComment: 'Shows great initiative in team settings.',
+    },
+  ],
 };
 

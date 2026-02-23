@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, Download, Printer } from 'lucide-react';
 import { AcademicDiaryData } from '@/lib/types';
-import { SchoolHeader } from '@/components/diary/SchoolHeader';
 import { StudentDetailsCard } from '@/components/diary/StudentDetailsCard';
 import { WeeklyDiaryLayout } from '@/components/diary/WeeklyDiaryLayout';
 import { SignatureSections } from '@/components/diary/SignatureSections';
@@ -31,7 +30,7 @@ export function DiaryPreview({ data, onBack }: DiaryPreviewProps) {
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-8 print:p-0">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-[500px] mx-auto">
         {/* Preview Header (Hidden during print) */}
         <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 print:hidden">
           <div className="flex items-center gap-4">
@@ -67,12 +66,7 @@ export function DiaryPreview({ data, onBack }: DiaryPreviewProps) {
         </div>
 
         {/* The Diary Document Area (Matches Editor structure but non-editable) */}
-        <div className="bg-white shadow-xl min-h-[1100px] flex flex-col p-6 md:p-10 space-y-0 print:shadow-none print:p-0">
-          <SchoolHeader 
-            schoolDetails={displayData.schoolDetails} 
-            editable={false}
-          />
-          
+        <div className="bg-white shadow-xl min-h-[700px] flex flex-col p-6 md:p-10 space-y-0 print:shadow-none print:p-0">
           <StudentDetailsCard 
             studentDetails={displayData.studentDetails}
             editable={false}
@@ -83,6 +77,7 @@ export function DiaryPreview({ data, onBack }: DiaryPreviewProps) {
             editable={false}
             onAddEntry={() => {}}
             weekNumber={displayData.weekNumber}
+            term={displayData.studentDetails?.term || 'Term One'}
           />
           
           <SignatureSections 

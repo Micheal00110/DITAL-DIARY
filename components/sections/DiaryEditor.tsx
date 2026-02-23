@@ -7,13 +7,14 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Download, RotateCcw, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Download, AlertCircle, BookOpen, ClipboardList } from 'lucide-react';
 import { AcademicDiaryData, WeeklyScheduleEntry, SchoolDetails, StudentDetails, TeacherRemarks, ParentSignature } from '@/lib/types';
-import { SchoolHeader } from '@/components/diary/SchoolHeader';
 import { StudentDetailsCard } from '@/components/diary/StudentDetailsCard';
 import { WeeklyDiaryLayout } from '@/components/diary/WeeklyDiaryLayout';
+import { WeeklySummary } from '@/components/diary/WeeklySummary';
 import { SignatureSections } from '@/components/diary/SignatureSections';
-import { academicDiarySampleData } from '@/lib/sample-data';
+
+type EditorPage = 'diary' | 'summary';
 import { cn } from '@/lib/utils';
 import { 
   STORAGE_KEYS, 
@@ -45,6 +46,7 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
   const [diaryData, setDiaryData] = useState<AcademicDiaryData>(DEFAULT_ACADEMIC_DATA);
   const [isSaved, setIsSaved] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [editorPage, setEditorPage] = useState<EditorPage>('diary');
 
   // Load from localStorage
   useEffect(() => {
@@ -113,16 +115,11 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
   };
 
   const addEntryForDay = (dayOfWeek: string) => {
-    // Check if entry already exists for this day
-    const existingEntry = diaryData.weeklySchedule.find(entry => entry.dayOfWeek === dayOfWeek);
-    if (existingEntry) {
-      return; // Entry already exists
-    }
-
+    // Removed guard to allow multiple subjects per day
     const newEntry: WeeklyScheduleEntry = {
-      id: Date.now().toString(),
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
       dayOfWeek: dayOfWeek as DayOfWeek,
-      date: '',
+      date: diaryData.weeklySchedule.find(e => e.dayOfWeek === dayOfWeek)?.date || '',
       subject: '',
       lessonTopics: [],
       homework: '',
@@ -168,19 +165,83 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
     setIsSaved(false);
   };
 
-  const loadSampleData = () => {
-    const confirmed = window.confirm(ERROR_MESSAGES.CONFIRM_LOAD_SAMPLE);
-    if (confirmed) {
-      try {
-        setDiaryData(academicDiarySampleData);
-        setIsSaved(false);
-        setError(null);
-      } catch (e) {
-        setError('Failed to load sample data');
-        console.error('Error loading sample data:', e);
-      }
-    }
+  const updateLearningProgress = (id: string, field: keyof any, value: any) => {
+    setDiaryData(prev => ({
+      ...prev,
+      learningProgress: (prev.learningProgress || []).map(lp => 
+        lp.id === id ? { ...lp, [field]: value } : lp
+      )
+    }));
+    setIsSaved(false);
   };
+
+  const updateBehaviour = (id: string, field: keyof any, value: any) => {
+    setDiaryData(prev => ({
+      ...prev,
+      behaviour: (prev.behaviour || []).map(b => 
+        b.id === id ? { ...b, [field]: value } : b
+      )
+    }));
+    setIsSaved(false);
+  };
+
+  const updateTeacherNote = (id: string, field: keyof any, value: any) => {
+    setDiaryData(prev => ({
+      ...prev,
+      teacherNotes: (prev.teacherNotes || []).map(tn => 
+        tn.id === id ? { ...tn, [field]: value } : tn
+      )
+    }));
+    setIsSaved(false);
+  };
+
+  const addLearningProgress = () => {
+    const newEntry: any = {
+      id: Date.now().toString(),
+      learningArea: 'New Area',
+      skill: 'New Skill',
+      progress: 'Fair',
+      teacherComment: ''
+    };
+    setDiaryData(prev => ({
+      ...prev,
+      learningProgress: [...(prev.learningProgress || []), newEntry]
+    }));
+    setIsSaved(false);
+  };
+
+  const addBehaviour = () => {
+    const newEntry: any = {
+      id: Date.now().toString(),
+      date: new Date().toLocaleDateString(),
+      behaviourObserved: 'Interaction',
+      actionTaken: 'Discussion',
+      teacherComment: ''
+    };
+    setDiaryData(prev => ({
+      ...prev,
+      behaviour: [...(prev.behaviour || []), newEntry]
+    }));
+    setIsSaved(false);
+  };
+
+  const addTeacherNote = () => {
+    const newEntry: any = {
+      id: Date.now().toString(),
+      date: new Date().toLocaleDateString(),
+      from: 'TEACHER',
+      subject: 'Weekly Progress',
+      message: '',
+      read: false
+    };
+    setDiaryData(prev => ({
+      ...prev,
+      teacherNotes: [...(prev.teacherNotes || []), newEntry]
+    }));
+    setIsSaved(false);
+  };
+
+
 
   // Basic PDF export simulation
   const exportToPDF = () => {
@@ -196,7 +257,7 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
 
   return (
     <div className="min-h-screen bg-gray-100 p-2 sm:p-4 md:p-6 lg:p-8 print:p-0">
-      <div className="max-w-4xl sm:max-w-5xl mx-auto bg-white shadow-xl min-h-[800px] sm:min-h-[1100px] flex flex-col print:shadow-none">
+      <div className="max-w-[500px] mx-auto bg-white shadow-xl min-h-[700px] flex flex-col print:shadow-none">
         
         {/* Error Alert */}
         {error && (
@@ -218,67 +279,130 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
         )}
         
         {/* Editor Controls (Hidden during print) */}
-        <div className={cn('p-3 sm:p-4 border-b bg-gray-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3', PRINT_CONFIG.HIDE_DURING_PRINT)}>
-          <div className="flex items-center gap-2 sm:gap-4">
-            <Button variant="ghost" size="sm" onClick={onBack}>
-              <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
-              <span className="text-sm">Back</span>
-            </Button>
-            <h1 className="text-base sm:text-lg font-bold">Academic Diary Editor</h1>
+        <div className={cn('p-3 sm:p-4 border-b bg-gray-50 flex flex-col gap-3', PRINT_CONFIG.HIDE_DURING_PRINT)}>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Button variant="ghost" size="sm" onClick={onBack}>
+                <ArrowLeft className="w-4 h-4 mr-1 sm:mr-2" />
+                <span className="text-sm">Back</span>
+              </Button>
+              <h1 className="text-base sm:text-lg font-bold">DIARY</h1>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-2">
+
+              <Button variant="outline" size="sm" onClick={exportToPDF}>
+                <Download className="w-4 h-4 mr-1 sm:mr-2" />
+                <span className="text-sm hidden sm:inline">Print / PDF</span>
+                <span className="text-sm sm:hidden">PDF</span>
+              </Button>
+            </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-2">
-            <Button variant="outline" size="sm" onClick={loadSampleData}>
-              <RotateCcw className="w-4 h-4 mr-1 sm:mr-2" />
-              <span className="text-sm">Load Sample</span>
-            </Button>
-            <Button variant="outline" size="sm" onClick={exportToPDF}>
-              <Download className="w-4 h-4 mr-1 sm:mr-2" />
-              <span className="text-sm hidden sm:inline">Print / PDF</span>
-              <span className="text-sm sm:hidden">PDF</span>
-            </Button>
-            <div className={cn('text-xs px-2 py-1 rounded', isSaved ? STATUS_STYLES.SAVED : STATUS_STYLES.SAVING)}>
+          {/* Status Indicator - Fixed Position */}
+          <div className="flex justify-center sm:justify-end">
+            <div className={cn('text-xs px-3 py-1.5 rounded-full font-medium shadow-sm', isSaved ? STATUS_STYLES.SAVED : STATUS_STYLES.SAVING)}>
               {isSaved ? STATUS_TEXT.SAVED : STATUS_TEXT.SAVING}
             </div>
+          </div>
+
+          {/* Page Tabs */}
+          <div className="flex border-t border-gray-200">
+            <button
+              onClick={() => setEditorPage('diary')}
+              className={cn(
+                'flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-bold transition-all',
+                editorPage === 'diary'
+                  ? 'text-primary border-b-2 border-primary bg-primary/5'
+                  : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+              )}
+            >
+              <BookOpen className="w-4 h-4" />
+              Daily Entries
+            </button>
+            <button
+              onClick={() => setEditorPage('summary')}
+              className={cn(
+                'flex-1 flex items-center justify-center gap-2 py-2.5 text-sm font-bold transition-all',
+                editorPage === 'summary'
+                  ? 'text-primary border-b-2 border-primary bg-primary/5'
+                  : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+              )}
+            >
+              <ClipboardList className="w-4 h-4" />
+              Weekly Summary
+            </button>
           </div>
         </div>
 
         {/* The Diary Document Area */}
         <div className="flex-1 p-3 sm:p-6 md:p-8 lg:p-10 space-y-0">
-          <SchoolHeader 
-            schoolDetails={diaryData.schoolDetails} 
-            editable={true}
-            onUpdate={handleUpdateSchool}
-          />
-          
-          <StudentDetailsCard 
-            studentDetails={diaryData.studentDetails}
-            editable={true}
-            onUpdate={handleUpdateStudent}
-          />
-          
-          <WeeklyDiaryLayout 
-            entries={diaryData.weeklySchedule}
-            editable={true}
-            onAdd={addScheduleEntry}
-            onAddEntry={addEntryForDay}
-            onUpdate={updateScheduleEntry}
-            onDelete={deleteScheduleEntry}
-            weekNumber={diaryData.weekNumber}
-          />
-          
-          <SignatureSections 
-            teacherRemarks={diaryData.teacherRemarks}
-            parentSignature={diaryData.parentSignature}
-            verified={diaryData.verified}
-            editable={true}
-            onUpdateTeacher={updateTeacherRemarks}
-            onUpdateParent={updateParentSignature}
-          />
+
+          {/* Page 1: Daily Entries */}
+          <div className={cn(
+            "space-y-0",
+            editorPage === 'diary' ? 'block' : 'hidden print:block',
+            "print:break-after-page"
+          )}>
+            <StudentDetailsCard 
+              studentDetails={diaryData.studentDetails}
+              editable={true}
+              onUpdate={handleUpdateStudent}
+            />
+            
+            <WeeklyDiaryLayout 
+              entries={diaryData.weeklySchedule}
+              editable={true}
+              onAdd={addScheduleEntry}
+              onAddEntry={addEntryForDay}
+              onUpdate={updateScheduleEntry}
+              onDelete={deleteScheduleEntry}
+              weekNumber={diaryData.weekNumber}
+              term={diaryData.studentDetails.term}
+              onTermChange={(value) => handleUpdateStudent('term', value)}
+              onWeekChange={(value) => setDiaryData(prev => ({ ...prev, weekNumber: value }))}
+            />
+            {/* Page 1 Footer (Print Only) */}
+            <div className="hidden print:flex mt-auto pt-8 justify-between text-[10px] text-gray-400 uppercase font-bold border-t border-gray-100">
+               <span>Week {diaryData.weekNumber || 1} | Page 1 of 2</span>
+               <span>Digital Student Diary</span>
+            </div>
+          </div>
+
+          {/* Page 2: Weekly Summary */}
+          <div className={cn(
+            "space-y-0",
+            editorPage === 'summary' ? 'block' : 'hidden print:block'
+          )}>
+            <WeeklySummary
+              entries={diaryData.weeklySchedule}
+              learningProgress={diaryData.learningProgress}
+              behaviour={diaryData.behaviour}
+              teacherNotes={diaryData.teacherNotes}
+              teacherRemarks={diaryData.teacherRemarks}
+              parentSignature={diaryData.parentSignature}
+              editable={true}
+              weekNumber={diaryData.weekNumber}
+              term={diaryData.studentDetails.term}
+              onUpdateLearningProgress={updateLearningProgress}
+              onUpdateBehaviour={updateBehaviour}
+              onUpdateTeacherNote={updateTeacherNote}
+              onUpdateTeacherRemarks={updateTeacherRemarks}
+              onUpdateParentSignature={updateParentSignature}
+              onAddLearningProgress={addLearningProgress}
+              onAddBehaviour={addBehaviour}
+              onAddTeacherNote={addTeacherNote}
+            />
+            {/* Page 2 Footer (Print Only) */}
+            <div className="hidden print:flex mt-auto pt-8 justify-between text-[10px] text-gray-400 uppercase font-bold border-t border-gray-100">
+               <span>Week {diaryData.weekNumber || 1} | Page 2 of 2</span>
+               <span>Digital Student Diary</span>
+            </div>
+          </div>
           
           {/* Page Footer Info */}
-          <div className="mt-auto pt-12 flex justify-between text-xs text-gray-500 uppercase font-medium">
-             <span>Week {diaryData.weekNumber || 1} | Page 1 of 12</span>
+          <div className="mt-auto pt-12 flex justify-between text-xs text-gray-500 uppercase font-medium print:hidden">
+             <span>Week {diaryData.weekNumber || 1} | {editorPage === 'diary' ? 'Page 1' : 'Page 2'} of 2</span>
           </div>
         </div>
       </div>

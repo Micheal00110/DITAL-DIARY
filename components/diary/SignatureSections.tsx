@@ -9,6 +9,7 @@
 import { TeacherRemarks, ParentSignature } from '@/lib/types';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { AnimatedCheckbox } from '@/components/ui/animated-checkbox';
 import { Check } from 'lucide-react';
 
 interface SignatureSectionsProps {
@@ -44,36 +45,24 @@ export function SignatureSections({
                 placeholder="Enter remarks here..."
                 className="min-h-[60px] text-sm"
               />
-              <div className="grid grid-cols-2 gap-2">
-                <div className="flex items-center gap-1">
-                  <span className="text-xs font-semibold">Sign:</span>
-                  <Input
-                    value={teacherRemarks?.teacherName || teacherRemarks?.signature || ''}
-                    onChange={(e) => onUpdateTeacher('teacherName', e.target.value)}
-                    className="h-7 text-xs"
-                    placeholder="Name"
-                  />
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="text-xs font-semibold">Date:</span>
-                  <Input
-                    type="text"
-                    value={teacherRemarks?.date || ''}
-                    onChange={(e) => onUpdateTeacher('date', e.target.value)}
-                    className="h-7 text-xs"
-                    placeholder="DD/MM/YY"
-                  />
-                </div>
-              </div>
+              <AnimatedCheckbox
+                id="teacher-sign"
+                label="Signed"
+                checked={!!(teacherRemarks?.teacherName || teacherRemarks?.signature)}
+                onChange={(checked) => onUpdateTeacher('teacherName', checked ? 'Signed' : '')}
+              />
             </div>
           ) : (
             <div className="space-y-4">
               <p className="text-sm italic min-h-[40px]">
                 {teacherRemarks?.remarks || 'No remarks provided.'}
               </p>
-              <div className="flex justify-between text-xs border-t border-gray-200 pt-2">
-                <span>Sign: <span className="underline decoration-dotted">{teacherRemarks?.teacherName || '__________'}</span></span>
-                <span>Date: <span className="underline decoration-dotted">{teacherRemarks?.date || '__________'}</span></span>
+              <div className="text-xs border-t border-gray-200 pt-2 flex items-center gap-1">
+                <AnimatedCheckbox
+                  id="teacher-sign-readonly"
+                  label="Signed"
+                  checked={!!(teacherRemarks?.teacherName)}
+                />
               </div>
             </div>
           )}
@@ -97,24 +86,11 @@ export function SignatureSections({
                   placeholder="Parent Signature"
                 />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold">Date:</span>
-                <Input
-                  type="text"
-                  value={parentSignature?.date || ''}
-                  onChange={(e) => onUpdateParent('date', e.target.value)}
-                  className="h-8 text-sm w-32"
-                  placeholder="DD/MM/YY"
-                />
-              </div>
             </div>
           ) : (
             <div className="space-y-6 pt-2">
               <div className="text-sm">
                 Signature: <span className="underline decoration-dotted ml-2">{parentSignature?.signature || '____________________'}</span>
-              </div>
-              <div className="text-sm">
-                Date: <span className="underline decoration-dotted ml-2">{parentSignature?.date || '__________'}</span>
               </div>
             </div>
           )}

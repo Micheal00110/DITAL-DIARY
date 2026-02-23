@@ -110,6 +110,8 @@ export interface WeeklyScheduleEntry {
   lessonTopics: string[]; // Array of lesson topics/points
   homework: string; // Homework description
   homeworkDue?: string; // Due date for homework
+  teacher?: string; // Teacher name for this entry
+  parent?: string; // Parent name/input for this entry
 }
 
 // Teacher remarks and signature
@@ -136,5 +138,8 @@ export interface AcademicDiaryData {
   verified: boolean; // Whether the diary has been verified
   weekNumber?: number; // Week number in the term
   pageNumber?: number; // Page number for multi-page diaries
+  learningProgress?: LearningProgress[];
+  behaviour?: BehaviourRecord[];
+  teacherNotes?: TeacherNote[];
 }
 
