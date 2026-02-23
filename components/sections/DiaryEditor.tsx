@@ -256,8 +256,8 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
   const clearError = () => setError(null);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-2 sm:p-4 md:p-6 lg:p-8 print:p-0">
-      <div className="max-w-[500px] mx-auto bg-white shadow-xl min-h-[700px] flex flex-col print:shadow-none">
+    <div className="min-h-screen bg-gray-100 p-0 sm:p-4 md:p-6 lg:p-8 print:p-0">
+      <div className="w-full max-w-4xl mx-auto bg-white shadow-xl min-h-screen sm:min-h-[700px] flex flex-col print:shadow-none">
         
         {/* Error Alert */}
         {error && (

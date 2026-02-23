@@ -79,24 +79,24 @@ export function WeeklySummary({
             {/* Page Header */}
             <div className="mb-6 pb-2 border-b-2 border-[#104e8b]/20">
               <h2 className="text-xl font-[900] text-[#104e8b]">{term} — Week {weekNumber}</h2>
-              <p className="text-[10px] uppercase font-bold text-[#104e8b]/50 tracking-widest mt-1">Weekly Summary</p>
+              <p className="text-xs uppercase font-bold text-[#104e8b]/50 tracking-widest mt-1">Weekly Summary</p>
             </div>
 
             {/* Summary Content */}
             <div className="space-y-6">
               {/* Aye / No Tally */}
               <div className="bg-blue-50/30 border border-[#104e8b]/10 rounded-lg p-5">
-                <h4 className="text-[11px] text-[#104e8b] uppercase border-b border-[#104e8b] inline-block mb-4 font-black">
+                <h4 className="text-xs text-[#104e8b] uppercase border-b border-[#104e8b] inline-block mb-4 font-black">
                   Attendance Summary
                 </h4>
                 <div className="flex items-center justify-center gap-10">
                   <div className="flex flex-col items-center gap-1">
-                    <span className="text-[9px] text-[#104e8b] uppercase font-black">Total Ayes</span>
+                    <span className="text-[10px] text-[#104e8b] uppercase font-black">Total Ayes</span>
                     <span className="text-3xl font-[900] text-emerald-600">{totalAyes}</span>
                   </div>
                   <div className="w-px h-12 bg-[#104e8b]/20"></div>
                   <div className="flex flex-col items-center gap-1">
-                    <span className="text-[9px] text-[#104e8b] uppercase font-black">Total Nos</span>
+                    <span className="text-[10px] text-[#104e8b] uppercase font-black">Total Nos</span>
                     <span className="text-3xl font-[900] text-red-500">{totalNos}</span>
                   </div>
                 </div>
@@ -105,11 +105,11 @@ export function WeeklySummary({
               {/* Learning Progress (CBC) Section */}
               <div className="space-y-4 font-black">
                 <div className="flex justify-between items-baseline border-b border-[#104e8b]">
-                  <h4 className="text-[11px] text-[#104e8b] uppercase inline-block mb-1">
+                  <h4 className="text-xs text-[#104e8b] uppercase inline-block mb-1">
                     Learning Progress (CBC)
                   </h4>
                   {editable && (
-                    <Button variant="ghost" size="sm" className="h-6 text-[9px] text-primary" onClick={onAddLearningProgress}>
+                    <Button variant="ghost" size="sm" className="h-7 text-[10px] text-primary" onClick={onAddLearningProgress}>
                       <Plus className="w-3 h-3 mr-1" /> Add Area
                     </Button>
                   )}
@@ -154,10 +154,10 @@ export function WeeklySummary({
                         ) : (
                           <>
                             <div className="flex justify-between">
-                              <span className="text-[9px] text-[#104e8b] font-black">{lp.learningArea}: {lp.skill}</span>
-                              <span className="text-[9px] text-emerald-600 font-black">{lp.progress}</span>
+                              <span className="text-[10px] text-[#104e8b] font-black">{lp.learningArea}: {lp.skill}</span>
+                              <span className="text-[10px] text-emerald-600 font-black">{lp.progress}</span>
                             </div>
-                            <p className="text-[10px] italic text-[#104e8b]/80">
+                            <p className="text-xs italic text-[#104e8b]/80">
                               {lp.teacherComment}
                             </p>
                           </>
@@ -175,11 +175,11 @@ export function WeeklySummary({
               {/* Behaviour Record Section */}
               <div className="space-y-4 font-black">
                 <div className="flex justify-between items-baseline border-b border-[#104e8b]">
-                  <h4 className="text-[11px] text-[#104e8b] uppercase inline-block mb-1">
+                  <h4 className="text-xs text-[#104e8b] uppercase inline-block mb-1">
                     Behaviour Record
                   </h4>
                   {editable && (
-                    <Button variant="ghost" size="sm" className="h-6 text-[9px] text-primary" onClick={onAddBehaviour}>
+                    <Button variant="ghost" size="sm" className="h-7 text-[10px] text-primary" onClick={onAddBehaviour}>
                       <Plus className="w-3 h-3 mr-1" /> Add Incident
                     </Button>
                   )}
@@ -222,17 +222,17 @@ export function WeeklySummary({
                         ) : (
                           <>
                             <div className="flex justify-between items-baseline mb-1">
-                              <span className="text-[9px] text-red-900 font-black uppercase">Incident: {b.behaviourObserved}</span>
-                              <span className="text-[8px] text-gray-400">{b.date}</span>
+                              <span className="text-[10px] text-red-900 font-black uppercase">Incident: {b.behaviourObserved}</span>
+                              <span className="text-xs text-gray-400">{b.date}</span>
                             </div>
                             <div className="grid grid-cols-1 gap-1">
                                <div className="flex items-baseline gap-1">
-                                  <span className="text-[8px] text-red-700 uppercase">Action:</span>
-                                  <span className="text-[9px] italic flex-1">{b.actionTaken}</span>
+                                  <span className="text-[10px] text-red-700 uppercase">Action:</span>
+                                  <span className="text-xs italic flex-1">{b.actionTaken}</span>
                                </div>
                                <div className="flex items-baseline gap-1">
-                                  <span className="text-[8px] text-red-700 uppercase">Comment:</span>
-                                  <span className="text-[9px] italic flex-1">{b.teacherComment}</span>
+                                  <span className="text-[10px] text-red-700 uppercase">Comment:</span>
+                                  <span className="text-xs italic flex-1">{b.teacherComment}</span>
                                </div>
                             </div>
                           </>
@@ -250,11 +250,11 @@ export function WeeklySummary({
               {/* Communication Notes Section */}
               <div className="space-y-4 font-black">
                 <div className="flex justify-between items-baseline border-b border-[#104e8b]">
-                  <h4 className="text-[11px] text-[#104e8b] uppercase inline-block mb-1">
+                  <h4 className="text-xs text-[#104e8b] uppercase inline-block mb-1">
                     Teacher ↔ Parent Communication
                   </h4>
                   {editable && (
-                    <Button variant="ghost" size="sm" className="h-6 text-[9px] text-primary" onClick={onAddTeacherNote}>
+                    <Button variant="ghost" size="sm" className="h-7 text-[10px] text-primary" onClick={onAddTeacherNote}>
                       <Plus className="w-3 h-3 mr-1" /> Add Note
                     </Button>
                   )}
@@ -270,7 +270,7 @@ export function WeeklySummary({
                           <div className="space-y-2">
                              <div className="flex justify-between items-center">
                                 <span className={cn(
-                                  "text-[8px] px-1.5 py-0.5 rounded-full font-black uppercase shadow-xs",
+                                  "text-[10px] px-1.5 py-0.5 rounded-full font-black uppercase shadow-xs",
                                   note.from === CommunicationDirection.TEACHER ? "bg-green-600 text-white" : "bg-purple-600 text-white"
                                 )}>
                                   From: {note.from}
@@ -278,7 +278,7 @@ export function WeeklySummary({
                                 <Input 
                                   value={note.date} 
                                   onChange={(e) => onUpdateTeacherNote?.(note.id, 'date', e.target.value)}
-                                  className="h-6 text-[9px] w-20 border-gray-200"
+                                  className="h-7 text-xs w-24 border-gray-200"
                                   placeholder="Date"
                                 />
                              </div>
@@ -299,15 +299,15 @@ export function WeeklySummary({
                           <>
                             <div className="flex justify-between items-baseline mb-2">
                               <span className={cn(
-                                "text-[8px] px-2 py-0.5 rounded-full font-black uppercase text-white shadow-xs",
+                                "text-[10px] px-2 py-0.5 rounded-full font-black uppercase text-white shadow-xs",
                                 note.from === CommunicationDirection.TEACHER ? "bg-green-600" : "bg-purple-600"
                               )}>
                                 {note.from === CommunicationDirection.TEACHER ? 'Teacher' : 'Parent'}
                               </span>
-                              <span className="text-[8px] text-gray-400">{note.date}</span>
+                              <span className="text-xs text-gray-400">{note.date}</span>
                             </div>
-                            <h5 className="text-[10px] font-black text-[#104e8b] mb-1">{note.subject}</h5>
-                            <p className="text-[10px] leading-relaxed text-gray-700 italic">
+                            <h5 className="text-xs font-black text-[#104e8b] mb-1">{note.subject}</h5>
+                            <p className="text-xs leading-relaxed text-gray-700 italic">
                                 &quot;{note.message}&quot;
                             </p>
                           </>
@@ -324,27 +324,27 @@ export function WeeklySummary({
 
               {/* Parent / Guardian Section */}
               <div className="space-y-4 font-black">
-                <h4 className="text-[11px] text-[#104e8b] uppercase border-b border-[#104e8b] inline-block mb-1">
+                <h4 className="text-xs text-[#104e8b] uppercase border-b border-[#104e8b] inline-block mb-1">
                   Parent / Guardian
                 </h4>
                 <div className="grid grid-cols-1 gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-[9px] text-[#104e8b] uppercase whitespace-nowrap">Parent&apos;s / Guardian&apos;s Name:</span>
+                    <span className="text-xs text-[#104e8b] uppercase whitespace-nowrap">Parent&apos;s / Guardian&apos;s Name:</span>
                     {editable ? (
                       <Input 
                         value={parentSignature?.signature || ''} 
                         onChange={(e) => onUpdateParentSignature?.('signature', e.target.value)}
-                        className="h-6 text-[10px] flex-1 border-0 border-b border-dotted border-[#104e8b]/30 rounded-none bg-transparent px-0"
+                        className="h-7 text-xs flex-1 border-0 border-b border-dotted border-[#104e8b]/30 rounded-none bg-transparent px-0"
                       />
                     ) : (
                       <div className="flex-1 border-b border-dotted border-[#104e8b]/30 min-h-[16px]">
-                        <span className="text-[10px]">{parentSignature?.signature}</span>
+                        <span className="text-xs">{parentSignature?.signature}</span>
                       </div>
                     )}
                   </div>
                   <div className="flex justify-between gap-4">
                     <div className="flex items-center gap-2 flex-1">
-                      <span className="text-[9px] text-[#104e8b] uppercase">Date:</span>
+                      <span className="text-xs text-[#104e8b] uppercase">Date:</span>
                       {editable ? (
                         <Input 
                           value={parentSignature?.date || ''} 
@@ -370,17 +370,17 @@ export function WeeklySummary({
 
               {/* Teacher Notes & Remarks */}
               <div className="space-y-4 font-black">
-                <h4 className="text-[11px] text-[#104e8b] uppercase border-b border-[#104e8b] inline-block mb-1">
+                <h4 className="text-xs text-[#104e8b] uppercase border-b border-[#104e8b] inline-block mb-1">
                   Teacher&apos;s Note &amp; Remarks
                 </h4>
                 <div className="space-y-3">
                   <div className="flex flex-col gap-1">
-                    <span className="text-[9px] text-[#104e8b] uppercase font-black">Remarks:</span>
+                    <span className="text-[10px] text-[#104e8b] uppercase font-black">Remarks:</span>
                     {editable ? (
                       <Textarea 
                         value={teacherRemarks?.remarks || ''} 
                         onChange={(e) => onUpdateTeacherRemarks?.('remarks', e.target.value)}
-                        className="text-[10px] min-h-[60px] border-dotted border-[#104e8b]/20 bg-blue-50/5"
+                        className="text-xs min-h-[60px] border-dotted border-[#104e8b]/20 bg-blue-50/5"
                         placeholder="Weekly teacher input..."
                       />
                     ) : (
@@ -392,7 +392,7 @@ export function WeeklySummary({
                   
                   <div className="flex justify-between gap-4">
                     <div className="flex items-center gap-2 flex-1">
-                      <span className="text-[9px] text-[#104e8b] uppercase">Name:</span>
+                      <span className="text-xs text-[#104e8b] uppercase">Name:</span>
                       {editable ? (
                         <Input 
                           value={teacherRemarks?.teacherName || ''} 

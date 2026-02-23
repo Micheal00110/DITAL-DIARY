@@ -38,7 +38,7 @@ export function TermDatesPage() {
                   <div className="flex-1 border-b border-dotted border-[#104e8b]/40 mx-2 pb-0.5 text-[#104e8b] text-[18px] font-handwriting font-bold px-2 italic">
                     {term.start}
                   </div>
-                  <span className="uppercase text-[9px] font-black italic px-2">To</span>
+                  <span className="uppercase text-xs font-black italic px-2">To</span>
                   <div className="flex-1 border-b border-dotted border-[#104e8b]/40 mx-2"></div>
                </div>
              </div>

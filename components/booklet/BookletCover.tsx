@@ -24,7 +24,7 @@ export function BookletCover({
         <div className="absolute top-4 left-4 z-20 flex flex-col items-center">
            <div className="relative">
               {/* Black Ribbon Ribbon Style */}
-              <div className="bg-black text-white text-[7px] font-black py-0.5 px-3 flex flex-col items-center gap-0.5 shadow-md">
+              <div className="bg-black text-white text-[10px] font-black py-0.5 px-3 flex flex-col items-center gap-0.5 shadow-md">
                  <span className="leading-none">EXCEL</span>
                  <div className="h-[1px] w-full bg-white/30" />
                  <span className="leading-none">WE</span>
@@ -82,7 +82,7 @@ export function BookletCover({
 
         <div className="space-y-6 relative z-10 max-w-[360px] mx-auto w-full">
           <div className="flex items-end gap-3 group">
-            <span className="font-[900] text-[#104e8b] uppercase text-[10px] tracking-widest min-w-[70px] mb-1">Name</span>
+            <span className="font-[900] text-[#104e8b] uppercase text-xs tracking-widest min-w-[70px] mb-1">Name</span>
             <div className="flex-1 border-b border-dotted border-blue-900/40 pb-0.5 relative">
               <span className="font-handwriting text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1">
                 {studentName}
@@ -91,7 +91,7 @@ export function BookletCover({
           </div>
           
           <div className="flex items-end gap-3 group">
-            <span className="font-[900] text-[#104e8b] uppercase text-[10px] tracking-widest min-w-[70px] mb-1">Campus</span>
+            <span className="font-[900] text-[#104e8b] uppercase text-xs tracking-widest min-w-[70px] mb-1">Campus</span>
             <div className="flex-1 border-b border-dotted border-blue-900/40 pb-0.5 relative">
               <span className="font-handwriting text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1">
                 {campus}
@@ -101,7 +101,7 @@ export function BookletCover({
 
           <div className="grid grid-cols-2 gap-4 w-full">
             <div className="flex items-end gap-2 group">
-              <span className="font-[900] text-[#104e8b] uppercase text-[10px] tracking-widest mb-1">Grade</span>
+              <span className="font-[900] text-[#104e8b] uppercase text-xs tracking-widest mb-1">Grade</span>
               <div className="flex-1 border-b border-dotted border-blue-900/40 pb-0.5 relative">
                 <span className="font-handwriting text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1 text-center">
                   {grade}
@@ -109,7 +109,7 @@ export function BookletCover({
               </div>
             </div>
             <div className="flex items-end gap-2 group">
-              <span className="font-[900] text-[#104e8b] uppercase text-[10px] tracking-widest mb-1">Year</span>
+              <span className="font-[900] text-[#104e8b] uppercase text-xs tracking-widest mb-1">Year</span>
               <div className="flex-1 border-b border-dotted border-blue-900/40 pb-0.5 relative">
                 <span className="font-handwriting text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1 text-center">
                   {year}

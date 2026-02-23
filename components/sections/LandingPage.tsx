@@ -177,17 +177,17 @@ export function LandingPage({ onPreview, onOpenDiary }: LandingPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-100/80 via-teal-50/50 to-white flex items-center justify-center">
-      <div className="w-full max-w-4xl px-4 pb-12">
+    <div className="min-h-screen bg-gradient-to-b from-sky-100/80 via-teal-50/50 to-white flex items-center justify-center p-2 sm:p-4">
+      <div className="w-full max-w-lg pb-8 sm:pb-12">
       {/* Diary cover / preview page one */}
       <div className="flex justify-center">
-        <div className="relative w-full max-w-[500px] aspect-[1/1.4] bg-white rounded-r-lg shadow-[20px_20px_60px_rgba(0,0,0,0.2),-5px_0_15px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col transition-all duration-300 transform">
+        <div className="relative w-full aspect-auto sm:aspect-[1/1.4] bg-white rounded-r-lg shadow-[20px_20px_60px_rgba(0,0,0,0.2),-5px_0_15px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col transition-all duration-300 transform min-h-[550px] sm:min-h-0">
           <div className="flex-1 overflow-y-auto page-fold animate-in fade-in slide-in-from-right-4 duration-500">
             <div className="h-full bg-white flex flex-col relative font-sans overflow-hidden border-r-4 border-blue-900/10">
-              <div className="bg-[#5cc5f2] p-6 pb-12 relative overflow-hidden">
+              <div className="bg-[#5cc5f2] p-4 sm:p-6 pb-10 sm:pb-12 relative overflow-hidden">
                 <div className="absolute top-4 left-4 z-20 flex flex-col items-center">
                   <div className="relative">
-                    <div className="bg-black text-white text-[7px] font-black py-0.5 px-3 flex flex-col items-center gap-0.5 shadow-md">
+                    <div className="bg-black text-white text-[10px] sm:text-xs md:text-sm font-black py-0.5 px-2 sm:px-3 flex flex-col items-center gap-0.5 shadow-md">
                       <span className="leading-none">EXCEL</span>
                       <div className="h-[1px] w-full bg-white/30" />
                       <span className="leading-none">WE</span>
@@ -195,73 +195,73 @@ export function LandingPage({ onPreview, onOpenDiary }: LandingPageProps) {
                       <span className="leading-none">TOGETHER</span>
                     </div>
                     <div className="absolute -bottom-2 left-0 right-0 flex justify-between px-1">
-                      <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[8px] border-t-black" />
-                      <div className="w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[8px] border-t-black" />
+                      <div className="w-0 h-0 border-l-[8px] sm:border-l-[10px] border-l-transparent border-r-[8px] sm:border-r-[10px] border-r-transparent border-t-[6px] sm:border-t-[8px] border-t-black" />
+                      <div className="w-0 h-0 border-l-[8px] sm:border-l-[10px] border-l-transparent border-r-[8px] sm:border-r-[10px] border-r-transparent border-t-[6px] sm:border-t-[8px] border-t-black" />
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-end pr-2 py-4">
-                  <div className="text-right text-white max-w-[220px]">
-                    <h2 className="text-sm font-black uppercase tracking-normal leading-tight">ST. HANNAH&apos;S PREPARATORY</h2>
-                    <h3 className="text-sm font-black uppercase tracking-normal leading-tight">SCHOOL LTD.</h3>
+                <div className="flex justify-end pr-1 sm:pr-2 py-3 sm:py-4">
+                  <div className="text-right text-white max-w-[180px] sm:max-w-[220px]">
+                    <h2 className="text-xs sm:text-sm font-black uppercase tracking-normal leading-tight">ST. HANNAH&apos;S PREPARATORY</h2>
+                    <h3 className="text-xs sm:text-sm font-black uppercase tracking-normal leading-tight">SCHOOL LTD.</h3>
                   </div>
                 </div>
-                <div className="px-8 mt-2 relative z-10">
-                  <div className="flex flex-col items-start translate-x-4">
-                    <span className="text-[#104e8b] font-handwriting text-5xl font-bold -mb-4 drop-shadow-sm rotate-[-4deg] relative z-20">My School</span>
-                    <span className="text-6xl font-[900] text-yellow-300 uppercase tracking-tighter drop-shadow-[2px_2px_0_rgba(0,0,0,0.1)] -ml-1">Diary</span>
+                <div className="px-4 sm:px-8 mt-1 sm:mt-2 relative z-10">
+                  <div className="flex flex-col items-start translate-x-2 sm:translate-x-4">
+                    <span className="text-[#104e8b] font-handwriting text-4xl sm:text-5xl font-bold -mb-3 sm:-mb-4 drop-shadow-sm rotate-[-4deg] relative z-20">My School</span>
+                    <span className="text-5xl sm:text-6xl font-[900] text-yellow-300 uppercase tracking-tighter drop-shadow-[2px_2px_0_rgba(0,0,0,0.1)] -ml-1">Diary</span>
                   </div>
                 </div>
                 <div className="absolute right-0 top-1/2 -translate-y-[40%] flex flex-col items-center">
-                  <h4 className="[writing-mode:vertical-rl] text-[#1e4a7a] font-serif text-4xl font-bold tracking-tighter opacity-80 select-none pointer-events-none">Together We Excel</h4>
+                  <h4 className="[writing-mode:vertical-rl] text-[#1e4a7a] font-serif text-3xl sm:text-4xl font-bold tracking-tighter opacity-80 select-none pointer-events-none">Together We Excel</h4>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-0 border-y-[6px] border-[#104e8b]">
-                <div className="aspect-[1.4] bg-slate-200 border-r-[3px] border-[#104e8b] relative group overflow-hidden">
-                  <div className="absolute inset-0 bg-blue-100/50 flex items-center justify-center font-black italic text-4xl text-blue-900/10 -rotate-12 transition-transform group-hover:scale-110">PHOTO 1</div>
+              <div className="grid grid-cols-2 gap-0 border-y-[4px] sm:border-y-[6px] border-[#104e8b]">
+                <div className="aspect-[1.4] bg-slate-200 border-r-[2px] sm:border-r-[3px] border-[#104e8b] relative group overflow-hidden">
+                  <div className="absolute inset-0 bg-blue-100/50 flex items-center justify-center font-black italic text-2xl sm:text-4xl text-blue-900/10 -rotate-12 transition-transform group-hover:scale-110">PHOTO 1</div>
                 </div>
-                <div className="aspect-[1.4] bg-slate-300 border-l-[3px] border-[#104e8b] relative group overflow-hidden">
-                  <div className="absolute inset-0 bg-slate-200 flex items-center justify-center font-black italic text-4xl text-slate-900/10 rotate-12 transition-transform group-hover:scale-110">PHOTO 2</div>
+                <div className="aspect-[1.4] bg-slate-300 border-l-[2px] sm:border-l-[3px] border-[#104e8b] relative group overflow-hidden">
+                  <div className="absolute inset-0 bg-slate-200 flex items-center justify-center font-black italic text-2xl sm:text-4xl text-slate-900/10 rotate-12 transition-transform group-hover:scale-110">PHOTO 2</div>
                 </div>
               </div>
-              <div className="flex-1 p-8 pt-10 flex flex-col bg-slate-50 relative overflow-hidden">
+              <div className="flex-1 p-4 sm:p-8 pt-6 sm:pt-10 flex flex-col bg-slate-50 relative overflow-hidden">
                 <div className="absolute inset-0 paper-texture opacity-30 pointer-events-none" />
-                <div className="space-y-6 relative z-10 max-w-[360px] mx-auto w-full">
-                  <div className="flex items-end gap-3 group">
-                    <span className="font-[900] text-[#104e8b] uppercase text-[10px] tracking-widest min-w-[70px] mb-1">Name</span>
+                <div className="space-y-4 sm:space-y-6 relative z-10 max-w-[360px] mx-auto w-full">
+                  <div className="flex items-end gap-2 sm:gap-3 group">
+                    <span className="font-[900] text-[#104e8b] uppercase text-xs sm:text-sm tracking-widest min-w-[60px] sm:min-w-[70px] mb-1">Name</span>
                     <div className="flex-1 border-b border-dotted border-blue-900/40 pb-0.5 relative">
-                      <span className="font-handwriting text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1">Zanny Imani Karan</span>
+                      <span className="font-handwriting text-2xl sm:text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1">Zanny Imani Karan</span>
                     </div>
                   </div>
-                  <div className="flex items-end gap-3 group">
-                    <span className="font-[900] text-[#104e8b] uppercase text-[10px] tracking-widest min-w-[70px] mb-1">Campus</span>
+                  <div className="flex items-end gap-2 sm:gap-3 group">
+                    <span className="font-[900] text-[#104e8b] uppercase text-xs sm:text-sm tracking-widest min-w-[60px] sm:min-w-[70px] mb-1">Campus</span>
                     <div className="flex-1 border-b border-dotted border-blue-900/40 pb-0.5 relative">
-                      <span className="font-handwriting text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1">Ngong Road</span>
+                      <span className="font-handwriting text-2xl sm:text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1">Ngong Road</span>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4 w-full">
-                    <div className="flex items-end gap-2 group">
-                      <span className="font-[900] text-[#104e8b] uppercase text-[10px] tracking-widest mb-1">Grade</span>
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
+                    <div className="flex items-end gap-1 sm:gap-2 group">
+                      <span className="font-[900] text-[#104e8b] uppercase text-xs sm:text-sm tracking-widest mb-1">Grade</span>
                       <div className="flex-1 border-b border-dotted border-blue-900/40 pb-0.5 relative">
-                        <span className="font-handwriting text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1 text-center">5M</span>
+                        <span className="font-handwriting text-2xl sm:text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1 text-center">5M</span>
                       </div>
                     </div>
-                    <div className="flex items-end gap-2 group">
-                      <span className="font-[900] text-[#104e8b] uppercase text-[10px] tracking-widest mb-1">Year</span>
+                    <div className="flex items-end gap-1 sm:gap-2 group">
+                      <span className="font-[900] text-[#104e8b] uppercase text-xs sm:text-sm tracking-widest mb-1">Year</span>
                       <div className="flex-1 border-b border-dotted border-blue-900/40 pb-0.5 relative">
-                        <span className="font-handwriting text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1 text-center">2026</span>
+                        <span className="font-handwriting text-2xl sm:text-3xl font-bold text-[#1e3a8a] italic px-2 block leading-none py-1 text-center">2026</span>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="mt-auto flex justify-center py-4">
+                <div className="mt-8 sm:mt-auto flex justify-center py-4">
                   <button 
                     data-slot="button"
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all hover:scale-105 active:scale-95 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-md px-6 h-10 text-base bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap font-bold transition-all hover:scale-105 active:scale-95 disabled:pointer-events-none disabled:opacity-50 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 rounded-lg px-6 sm:px-8 h-12 text-sm sm:text-base bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white shadow-[0_4px_12px_rgba(0,0,0,0.2)] uppercase tracking-wider"
                     onClick={() => setShowForm(true)}
                     data-component-name="LandingPage"
                   >
-                    <LogIn className="w-4 h-4" />
+                    <LogIn className="w-4 h-4 sm:w-5 sm:h-5 " />
                     Open Student Diary
                   </button>
                 </div>

@@ -11,6 +11,12 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'] });
 const caveat = Caveat({ subsets: ['latin'], variable: '--font-handwriting' });
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   title: {
     default: '***STUDENT DIARY*** - Kenyan Digital School Diary',
