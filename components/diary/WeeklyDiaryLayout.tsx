@@ -1,8 +1,7 @@
 /**
- * Weekly Diary Layout Component
- * Matches the booklet structure but maintains editability
- * Based on WeeklyDiaryPage but with editable functionality
- * Features Managed Tabs with Day-to-Day navigation.
+ * Weekly Diary Layout Component - Mobile Optimized
+ * Responsive design for all screen sizes (320px - 4K)
+ * Features day-to-day navigation with smooth animations
  */
 
 'use client';
@@ -12,7 +11,7 @@ import { WeeklyScheduleEntry } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { CalendarPlus, ChevronLeft, ChevronRight, Plus, CheckCircle2, Info } from 'lucide-react';
+import { Plus, CheckCircle2 } from 'lucide-react';
 import { COLORS, FONTS, UTILS } from '@/lib/styles';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -32,18 +31,15 @@ const DAYS_OF_WEEK = [
   "Saturday - Jumamosi"
 ];
 
-// Function to calculate term and week based on date - Standard Kenyan School Calendar
 const getTermAndWeekFromDate = (dateString: string) => {
   if (!dateString) return { term: 'Term One', week: 1 };
-  
   const date = new Date(dateString);
   const year = date.getFullYear();
-  const month = date.getMonth(); // 0-11
+  const month = date.getMonth();
   const day = date.getDate();
   
   let term = 'Term One';
   let week = 1;
-  
   const startOfYear = new Date(year, 0, 1);
   const dayOfYear = Math.floor((date.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000)) + 1;
   
@@ -85,18 +81,15 @@ export function WeeklyDiaryLayout({
   onTermChange,
   onWeekChange,
 }: WeeklyDiaryLayoutProps) {
-  // Fix: visibleDays should be tracked based on entries presence
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [activeSubjectIndex, setActiveSubjectIndex] = useState(0);
   const [pendingTeacher, setPendingTeacher] = useState<Record<string, string>>({});
   const [pendingParent, setPendingParent] = useState<Record<string, string>>({});
 
-  // Reset subject index when day changes
   useEffect(() => {
     setActiveSubjectIndex(0);
   }, [activeDayIndex]);
 
-  // Calculate visible days from entries + a minimum of 3
   const visibleDays = useMemo(() => {
     const indices = entries.map(entry => {
       const idx = DAYS_OF_WEEK.findIndex(d => d.split(' - ')[0].toUpperCase() === (entry.dayOfWeek || '').toUpperCase());
@@ -105,7 +98,6 @@ export function WeeklyDiaryLayout({
     return Math.max(3, ...indices);
   }, [entries]);
 
-  // Ensure active day is within visible range
   useEffect(() => {
     if (activeDayIndex >= visibleDays) {
       setActiveDayIndex(Math.max(0, visibleDays - 1));
@@ -131,9 +123,6 @@ export function WeeklyDiaryLayout({
     if (dayEntry.id.startsWith('temp-')) {
       if (onAddEntry) onAddEntry(dayKey);
       else if (onAdd) onAdd();
-      
-      // We can't easily set pending for temp multi-entries because the IDs change,
-      // but for now we'll support it for the current active subject.
       if (field === 'teacher') setPendingTeacher(prev => ({ ...prev, [`${dayKey}-${subjectIndex}`]: value as string }));
       if (field === 'parent') setPendingParent(prev => ({ ...prev, [`${dayKey}-${subjectIndex}`]: value as string }));
     } else {
@@ -145,7 +134,6 @@ export function WeeklyDiaryLayout({
     return entries.reduce((acc, entry) => {
       const dayKey = (entry.dayOfWeek || '').toString().split(' - ')[0].toUpperCase();
       if (!acc[dayKey]) acc[dayKey] = { day: dayKey, date: entry.date || '', subjects: [] };
-      
       acc[dayKey].subjects.push({
         id: entry.id,
         subject: entry.subject || 'Untitled Subject',
@@ -154,7 +142,6 @@ export function WeeklyDiaryLayout({
         teacher: (entry as any).teacher ?? '',
         parent: (entry as any).parent ?? ''
       });
-      
       return acc;
     }, {} as Record<string, any>);
   }, [entries]);
@@ -166,10 +153,10 @@ export function WeeklyDiaryLayout({
         <div className="absolute top-0 left-0 w-1 h-full bg-blue-900/40 pointer-events-none"></div>
         
         <div className="relative bg-white border-r-4 border-blue-900/10 shadow-[20px_20px_60px_rgba(0,0,0,0.2)]">
-          <div className="p-6 sm:p-8">
-            {/* Header with Term/Week Selection */}
-            <div className="mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-baseline border-b-2 border-dotted border-blue-200 pb-4 gap-4">
-              <div className="flex items-center gap-3 flex-wrap">
+          <div className="p-3 sm:p-4 md:p-6 lg:p-8">
+            {/* Header */}
+            <div className="mb-4 sm:mb-6 md:mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-baseline border-b-2 border-dotted border-blue-200 pb-2 sm:pb-3 md:pb-4 gap-2 sm:gap-3 md:gap-4">
+              <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 {(() => {
                   const firstDate = entries.find(e => e.date)?.date;
                   const calc = getTermAndWeekFromDate(firstDate || '');
@@ -182,12 +169,12 @@ export function WeeklyDiaryLayout({
                         <select
                           value={TERM_OPTIONS.includes(displayTerm as any) ? displayTerm : 'Term One'}
                           onChange={(e) => onTermChange(e.target.value)}
-                          className={`${FONTS.responsive.heading} ${UTILS.text.primary} bg-blue-50/50 px-3 py-1 rounded-lg border-b-2 border-blue-900/30 focus:outline-none focus:border-blue-900 cursor-pointer text-sm sm:text-base`}
+                          className="bg-blue-50/50 px-2 sm:px-3 py-1 rounded-lg border-b-2 border-blue-900/30 focus:outline-none focus:border-blue-900 cursor-pointer text-xs sm:text-sm md:text-base font-bold text-blue-900"
                         >
                           {TERM_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
                         </select>
                       ) : (
-                        <h2 className={`${FONTS.responsive.heading} ${UTILS.text.primary} font-black`}>{displayTerm}</h2>
+                        <h2 className="font-black text-blue-900 text-sm sm:text-base md:text-lg">{displayTerm}</h2>
                       )}
                       
                       {editable && onWeekChange ? (
@@ -197,12 +184,12 @@ export function WeeklyDiaryLayout({
                             const idx = WEEK_OPTIONS.indexOf(e.target.value as any);
                             if (idx !== -1) onWeekChange(idx + 1);
                           }}
-                          className={`${FONTS.responsive.heading} ${UTILS.text.primary} bg-blue-50/50 px-3 py-1 rounded-lg border-b-2 border-blue-900/30 focus:outline-none focus:border-blue-900 cursor-pointer text-sm sm:text-base`}
+                          className="bg-blue-50/50 px-2 sm:px-3 py-1 rounded-lg border-b-2 border-blue-900/30 focus:outline-none focus:border-blue-900 cursor-pointer text-xs sm:text-sm md:text-base font-bold text-blue-900"
                         >
                           {WEEK_OPTIONS.map(w => <option key={w} value={w}>{w}</option>)}
                         </select>
                       ) : (
-                        <h3 className={`${FONTS.responsive.heading} ${UTILS.text.secondary} opacity-70`}>- Week {displayWeek}</h3>
+                        <h3 className="text-blue-900/70 text-xs sm:text-sm md:text-base font-bold">- Week {displayWeek}</h3>
                       )}
                     </>
                   );
@@ -210,8 +197,8 @@ export function WeeklyDiaryLayout({
               </div>
             </div>
 
-            {/* Day Selector Tabs */}
-            <div className="mb-6 flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar border-b border-blue-50">
+            {/* Day Tabs */}
+            <div className="mb-4 sm:mb-6 flex items-center gap-1 sm:gap-2 overflow-x-auto pb-2 no-scrollbar border-b border-blue-50">
               {DAYS_OF_WEEK.slice(0, visibleDays).map((dayName, idx) => {
                 const isActive = activeDayIndex === idx;
                 const dayShort = dayName.split(" - ")[0].substring(0, 3);
@@ -219,14 +206,14 @@ export function WeeklyDiaryLayout({
                   <button
                     key={idx}
                     onClick={() => setActiveDayIndex(idx)}
-                    className={`relative px-5 py-2.5 rounded-xl text-xs font-black transition-all duration-300 min-w-[85px] uppercase tracking-wider
-                      ${isActive ? 'text-white bg-blue-900 shadow-md transform -translate-y-0.5' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
+                    className={`relative px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs md:text-sm font-black transition-all duration-300 min-w-[65px] sm:min-w-[75px] md:min-w-[85px] uppercase tracking-wider flex-shrink-0
+                      ${isActive ? 'text-white bg-blue-900 shadow-md' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
                   >
                     {dayShort}
                     {isActive && (
                       <motion.div
                         layoutId="activeDayGlow"
-                        className="absolute inset-0 bg-blue-400/20 blur-md rounded-xl -z-10"
+                        className="absolute inset-0 bg-blue-400/20 blur-md rounded-lg sm:rounded-xl -z-10"
                         initial={false}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                       />
@@ -243,15 +230,16 @@ export function WeeklyDiaryLayout({
                     else if (onAdd) onAdd();
                     setActiveDayIndex(visibleDays);
                   }}
-                  className="px-5 py-2.5 rounded-xl text-xs font-black text-emerald-600 hover:bg-emerald-50 transition-all border-2 border-dashed border-emerald-100 flex items-center gap-2"
+                  className="px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs md:text-sm font-black text-emerald-600 hover:bg-emerald-50 transition-all border-2 border-dashed border-emerald-100 flex items-center gap-1 whitespace-nowrap flex-shrink-0"
                 >
-                  <Plus className="w-3.5 h-3.5" /> ADD DAY
+                  <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <span className="hidden sm:inline">ADD</span>
                 </button>
               )}
             </div>
 
-            {/* Main Content Area with Transitions */}
-            <div className="relative min-h-[500px]">
+            {/* Content */}
+            <div className="relative min-h-[350px] sm:min-h-[450px] md:min-h-[500px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeDayIndex}
@@ -265,28 +253,26 @@ export function WeeklyDiaryLayout({
                     const dayName = DAYS_OF_WEEK[activeDayIndex];
                     const dayKey = dayName.split(" - ")[0].toUpperCase();
                     const dayData = dailyEntries[dayKey] || { day: dayName, subjects: [], homework: '', parent: '' };
-                    
-                    // Fallback for empty day - ensure we have at least one slot
                     const subjects = dayData.subjects.length > 0 ? dayData.subjects : [{ subject: '', homework: '', lessonTopics: [] }];
                     const activeSubject = subjects[activeSubjectIndex] || subjects[0];
                     
                     return (
-                      <div className="space-y-6">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                          <h3 className={`${UTILS.text.primary} text-2xl font-black italic tracking-tight`}>{dayName}</h3>
+                      <div className="space-y-3 sm:space-y-4 md:space-y-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 md:gap-4">
+                          <h3 className="text-base sm:text-lg md:text-2xl font-black italic tracking-tight text-blue-900">{dayName}</h3>
                           
-                          {/* Subject Tabs - NESTED */}
-                          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1">
+                          {/* Subject Tabs */}
+                          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 flex-wrap">
                             {subjects.map((s: any, sIdx: number) => (
                               <button
                                 key={sIdx}
                                 onClick={() => setActiveSubjectIndex(sIdx)}
-                                className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all
+                                className={`px-2 sm:px-3 md:px-4 py-1 rounded-full text-[8px] sm:text-[10px] md:text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap flex-shrink-0
                                   ${activeSubjectIndex === sIdx 
                                     ? 'bg-blue-100 text-blue-900 border border-blue-200' 
                                     : 'text-slate-400 hover:text-slate-600'}`}
                               >
-                                {s.subject || `Subj ${sIdx + 1}`}
+                                {s.subject?.substring(0, 8) || `S${sIdx + 1}`}
                               </button>
                             ))}
                             {editable && (
@@ -296,26 +282,26 @@ export function WeeklyDiaryLayout({
                                   else if (onAdd) onAdd();
                                   setTimeout(() => setActiveSubjectIndex(subjects.length), 50);
                                 }}
-                                className="p-1.5 rounded-full text-emerald-600 hover:bg-emerald-50 transition-all"
+                                className="p-1 sm:p-1.5 rounded-full text-emerald-600 hover:bg-emerald-50 transition-all flex-shrink-0"
                                 title="Add Subject"
                               >
-                                <Plus className="w-4 h-4" />
+                                <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
                               </button>
                             )}
                           </div>
                         </div>
 
-                        {/* Subject Header Input */}
+                        {/* Subject Input */}
                         {editable && (
-                           <div className="flex items-center gap-3">
-                             <label className="text-[10px] font-black text-slate-400 uppercase">Current Subject:</label>
-                             <Input 
-                               value={activeSubject.subject}
-                               onChange={(e) => handleDirectUpdate(dayKey, 'subject', e.target.value, activeSubjectIndex)}
-                               className="h-8 max-w-[200px] text-xs font-bold bg-slate-50 border-slate-100 rounded-lg"
-                               placeholder="e.g. MATHEMATICS"
-                             />
-                           </div>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 md:gap-3">
+                            <label className="text-[8px] sm:text-[10px] md:text-xs font-black text-slate-400 uppercase whitespace-nowrap">Subject:</label>
+                            <Input 
+                              value={activeSubject.subject}
+                              onChange={(e) => handleDirectUpdate(dayKey, 'subject', e.target.value, activeSubjectIndex)}
+                              className="h-6 sm:h-7 md:h-8 w-full text-xs font-bold bg-slate-50 border-slate-100 rounded-lg"
+                              placeholder="e.g. MATH"
+                            />
+                          </div>
                         )}
 
                         <AnimatePresence mode="wait">
@@ -325,41 +311,41 @@ export function WeeklyDiaryLayout({
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.2 }}
-                            className="grid grid-cols-1 gap-8"
+                            className="grid grid-cols-1 gap-3 sm:gap-4 md:gap-6"
                           >
-                            {/* Teacher's Input Card */}
-                            <div className="p-6 bg-blue-50/30 rounded-2xl border border-blue-100/50 space-y-4">
-                              <div className="flex items-center gap-3">
-                                <div className="p-2 bg-blue-900 rounded-lg text-white"><CheckCircle2 className="w-4 h-4" /></div>
-                                <span className="text-xs font-black uppercase tracking-widest text-blue-900">Homework & Instructions</span>
+                            {/* Homework Card */}
+                            <div className="p-2 sm:p-3 md:p-4 lg:p-6 bg-blue-50/30 rounded-lg sm:rounded-xl md:rounded-2xl border border-blue-100/50 space-y-2 sm:space-y-3 md:space-y-4">
+                              <div className="flex items-center gap-2 sm:gap-3">
+                                <div className="p-1 sm:p-1.5 md:p-2 bg-blue-900 rounded-lg text-white"><CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4" /></div>
+                                <span className="text-[8px] sm:text-[10px] md:text-xs font-black uppercase tracking-widest text-blue-900">Homework</span>
                               </div>
-                              <div className="flex flex-col sm:flex-row gap-6 items-start">
-                                <div className="flex-1 space-y-2 w-full">
-                                  <label className="text-[10px] uppercase font-bold text-slate-400 block ml-1">Assigned Tasks</label>
+                              <div className="flex flex-col gap-2 sm:gap-3 md:gap-4">
+                                <div className="space-y-1 sm:space-y-2">
+                                  <label className="text-[8px] sm:text-[10px] md:text-xs uppercase font-bold text-slate-400 block ml-1">Tasks</label>
                                   {editable ? (
                                     <Textarea
                                       value={activeSubject.homework || ''}
                                       onChange={(e) => handleDirectUpdate(dayKey, 'homework', e.target.value, activeSubjectIndex)}
-                                      placeholder="Enter homework details for this subject..."
-                                      className="min-h-[120px] bg-white border-slate-200 focus:border-blue-500 rounded-xl text-sm p-4 shadow-sm"
+                                      placeholder="Enter homework..."
+                                      className="min-h-[60px] sm:min-h-[80px] md:min-h-[120px] bg-white border-slate-200 focus:border-blue-500 rounded-lg text-xs p-2 sm:p-3 md:p-4 shadow-sm"
                                     />
                                   ) : (
-                                    <div className="min-h-[120px] bg-white border border-slate-100 rounded-xl p-5 text-sm text-slate-600 shadow-sm leading-relaxed whitespace-pre-wrap">
-                                      {activeSubject.homework || 'No special homework entries for this subject.'}
+                                    <div className="min-h-[60px] sm:min-h-[80px] md:min-h-[120px] bg-white border border-slate-100 rounded-lg p-2 sm:p-3 md:p-5 text-xs md:text-sm text-slate-600 shadow-sm leading-relaxed whitespace-pre-wrap">
+                                      {activeSubject.homework || 'No homework.'}
                                     </div>
                                   )}
                                 </div>
-                                <div className="w-full sm:w-64 space-y-2">
-                                  <label className="text-[10px] uppercase font-bold text-slate-400 block ml-1">Teacher Signature</label>
+                                <div className="space-y-1 sm:space-y-2">
+                                  <label className="text-[8px] sm:text-[10px] md:text-xs uppercase font-bold text-slate-400 block ml-1">Teacher</label>
                                   {editable ? (
                                     <Input
                                       value={activeSubject.teacher || pendingTeacher[`${dayKey}-${activeSubjectIndex}`] || ''}
                                       onChange={(e) => handleDirectUpdate(dayKey, 'teacher', e.target.value, activeSubjectIndex)}
-                                      className="bg-white border-0 border-b-2 border-slate-200 rounded-none focus:border-blue-900 px-2 h-10 font-bold text-blue-900 italic"
-                                      placeholder="Signatory Name"
+                                      className="bg-white border-0 border-b-2 border-slate-200 rounded-none focus:border-blue-900 px-2 h-6 sm:h-7 md:h-10 text-xs md:text-sm font-bold text-blue-900 italic"
+                                      placeholder="Name"
                                     />
                                   ) : (
-                                    <div className="h-10 border-b-2 border-slate-100 flex items-center px-2 font-bold text-slate-800 italic">
+                                    <div className="h-6 sm:h-7 md:h-10 border-b-2 border-slate-100 flex items-center px-2 text-xs md:text-sm font-bold text-slate-800 italic">
                                       {activeSubject.teacher || "---"}
                                     </div>
                                   )}
@@ -368,33 +354,33 @@ export function WeeklyDiaryLayout({
                             </div>
 
                             {/* Remarks Grid */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              <div className="space-y-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 md:gap-6">
+                              <div className="space-y-2 sm:space-y-3">
                                 <div className="flex items-center gap-2 mb-1">
-                                  <div className="w-1.5 h-5 bg-blue-900 rounded-full"></div>
-                                  <span className="text-xs font-black text-slate-800 uppercase tracking-widest">Observations / Remarks</span>
+                                  <div className="w-1 h-3 sm:w-1.5 sm:h-4 md:h-5 bg-blue-900 rounded-full"></div>
+                                  <span className="text-[8px] sm:text-[10px] md:text-xs font-black text-slate-800 uppercase tracking-widest">Remarks</span>
                                 </div>
                                 {editable ? (
                                   <Textarea
                                     value={activeSubject.lessonTopics?.join('\n') || ''}
                                     onChange={(e) => handleDirectUpdate(dayKey, 'lessonTopics', e.target.value.split('\n'), activeSubjectIndex)}
-                                    placeholder="Observations on conduct and progress..."
-                                    className="min-h-[150px] bg-slate-50/50 border-slate-100 rounded-2xl text-xs p-4 italic"
+                                    placeholder="Observations..."
+                                    className="min-h-[80px] sm:min-h-[100px] md:min-h-[150px] bg-slate-50/50 border-slate-100 rounded-lg md:rounded-2xl text-xs p-2 sm:p-3 md:p-4 italic"
                                   />
                                 ) : (
-                                  <div className="min-h-[150px] bg-slate-50/50 rounded-2xl p-5 text-sm text-slate-600 italic leading-relaxed border border-slate-50">
-                                    {activeSubject.lessonTopics?.join('\n') || 'No remarks recorded.'}
+                                  <div className="min-h-[80px] sm:min-h-[100px] md:min-h-[150px] bg-slate-50/50 rounded-lg md:rounded-2xl p-2 sm:p-3 md:p-5 text-xs md:text-sm text-slate-600 italic leading-relaxed border border-slate-50">
+                                    {activeSubject.lessonTopics?.join('\n') || 'No remarks.'}
                                   </div>
                                 )}
                               </div>
 
-                              <div className="space-y-3">
+                              <div className="space-y-2 sm:space-y-3">
                                 <div className="flex items-center gap-2 mb-1">
-                                  <div className="w-1.5 h-5 bg-emerald-500 rounded-full"></div>
-                                  <span className="text-xs font-black text-slate-800 uppercase tracking-widest">Parent Communication</span>
+                                  <div className="w-1 h-3 sm:w-1.5 sm:h-4 md:h-5 bg-emerald-500 rounded-full"></div>
+                                  <span className="text-[8px] sm:text-[10px] md:text-xs font-black text-slate-800 uppercase tracking-widest">Parent</span>
                                 </div>
-                                <div className="space-y-4">
-                                  <div className="flex items-center gap-3 p-3 bg-emerald-50/50 rounded-xl border border-emerald-100">
+                                <div className="space-y-2 sm:space-y-3">
+                                  <div className="flex items-center gap-2 p-1.5 sm:p-2 md:p-3 bg-emerald-50/50 rounded-lg md:rounded-xl border border-emerald-100">
                                     <input
                                       type="checkbox"
                                       id={`check-${dayKey}-${activeSubjectIndex}`}
@@ -406,20 +392,20 @@ export function WeeklyDiaryLayout({
                                         else { next = cur.replace(' [HOMEWORK_SEEN]', '').replace('[HOMEWORK_SEEN]', ''); }
                                         handleDirectUpdate(dayKey, 'subject', next, activeSubjectIndex);
                                       }}
-                                      className="w-5 h-5 accent-emerald-600 cursor-pointer"
+                                      className="w-3 h-3 sm:w-4 sm:h-4 accent-emerald-600 cursor-pointer"
                                     />
-                                    <label htmlFor={`check-${dayKey}-${activeSubjectIndex}`} className="text-xs font-black text-emerald-900 cursor-pointer">I have seen this homework</label>
+                                    <label htmlFor={`check-${dayKey}-${activeSubjectIndex}`} className="text-[8px] sm:text-[10px] md:text-xs font-black text-emerald-900 cursor-pointer">Seen</label>
                                   </div>
                                   {editable ? (
                                     <Textarea
                                       value={activeSubject.parent || pendingParent[`${dayKey}-${activeSubjectIndex}`] || ''}
                                       onChange={(e) => handleDirectUpdate(dayKey, 'parent', e.target.value, activeSubjectIndex)}
-                                      placeholder="Note to the teacher regarding this subject..."
-                                      className="min-h-[100px] bg-emerald-50/20 border-emerald-100 rounded-2xl text-xs p-4"
+                                      placeholder="Note..."
+                                      className="min-h-[60px] sm:min-h-[80px] md:min-h-[100px] bg-emerald-50/20 border-emerald-100 rounded-lg md:rounded-2xl text-xs p-2 sm:p-3 md:p-4"
                                     />
                                   ) : (
-                                    <div className="min-h-[100px] bg-emerald-50/10 rounded-2xl p-5 text-sm text-slate-600 italic leading-relaxed border border-emerald-50">
-                                      {activeSubject.parent || 'Waiting for parent feedback...'}
+                                    <div className="min-h-[60px] sm:min-h-[80px] md:min-h-[100px] bg-emerald-50/10 rounded-lg md:rounded-2xl p-2 sm:p-3 md:p-5 text-xs md:text-sm text-slate-600 italic leading-relaxed border border-emerald-50">
+                                      {activeSubject.parent || 'Waiting...'}
                                     </div>
                                   )}
                                 </div>
