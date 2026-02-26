@@ -190,22 +190,7 @@ export function StudentDetailsCard({ studentDetails, editable = false, onUpdate 
         </div>
       </div>
 
-      {/* Date bar - scroll-down menu */}
-      <div className="bg-white border-2 border-gray-800 border-t-0 py-2 px-4 student-detail-item cursor-pointer hover:bg-gray-50 transition-colors duration-200" data-duration="600">
-        <div className="flex justify-end">
-          <select
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="text-sm text-gray-600 border-0 bg-transparent focus:outline-none"
-          >
-            {dateOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+
             </div>
           </div>
         </div>

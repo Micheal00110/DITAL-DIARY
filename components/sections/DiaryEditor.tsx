@@ -30,9 +30,12 @@ import {
 import { DayOfWeek } from '@/lib/types/enums';
 import { getFromStorage, setToStorage } from '@/lib/storage';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { WelcomeHeader } from '@/components/ui/WelcomeHeader';
 
 interface DiaryEditorProps {
   onBack: () => void;
+  initialDayIndex?: number;
+  initialDate?: string;
 }
 
 const DEFAULT_ACADEMIC_DATA: AcademicDiaryData = {
@@ -42,11 +45,41 @@ const DEFAULT_ACADEMIC_DATA: AcademicDiaryData = {
   verified: false,
 };
 
-export function DiaryEditor({ onBack }: DiaryEditorProps) {
+export function DiaryEditor({ onBack, initialDayIndex = 0, initialDate = '' }: DiaryEditorProps) {
   const [diaryData, setDiaryData] = useState<AcademicDiaryData>(DEFAULT_ACADEMIC_DATA);
   const [isSaved, setIsSaved] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editorPage, setEditorPage] = useState<EditorPage>('diary');
+  const [activeDayIndex, setActiveDayIndex] = useState(initialDayIndex);
+
+  // Helper function to get day index from date
+  const getDayIndexFromDate = (dateString: string): number => {
+    if (!dateString) return 0;
+    const date = new Date(dateString);
+    const dayIndex = date.getDay(); // 0=Sunday, 1=Monday...
+    // Adjust to Monday=0, Tuesday=1, etc.
+    return dayIndex === 0 ? 6 : dayIndex - 1;
+  };
+
+  // Helper function to get day name from date
+  const getDayFromDate = (dateString: string): string => {
+    const days = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"];
+    const dayIndex = getDayIndexFromDate(dateString);
+    return days[dayIndex];
+  };
+
+  // Sync date with day index when initialDate changes
+  useEffect(() => {
+    if (initialDate) {
+      const dayIndex = getDayIndexFromDate(initialDate);
+      setActiveDayIndex(dayIndex);
+    } else {
+      // Set default to today's date if no initial date
+      const today = new Date().toISOString().split('T')[0];
+      const dayIndex = getDayIndexFromDate(today);
+      setActiveDayIndex(dayIndex);
+    }
+  }, [initialDate]);
 
   // Load from localStorage
   useEffect(() => {
@@ -257,6 +290,7 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
 
   return (
     <div className="min-h-screen bg-gray-100 p-0 sm:p-4 md:p-6 lg:p-8 print:p-0">
+      <WelcomeHeader />
       <div className="w-full max-w-4xl mx-auto bg-white shadow-xl min-h-screen sm:min-h-[700px] flex flex-col print:shadow-none">
         
         {/* Error Alert */}
@@ -361,6 +395,13 @@ export function DiaryEditor({ onBack }: DiaryEditorProps) {
               term={diaryData.studentDetails.term}
               onTermChange={(value) => handleUpdateStudent('term', value)}
               onWeekChange={(value) => setDiaryData(prev => ({ ...prev, weekNumber: value }))}
+              initialDayIndex={activeDayIndex}
+              initialDate={initialDate || new Date().toISOString().split('T')[0]}
+              onDateChange={(date) => {
+                // Auto-update day index when date changes
+                const newDayIndex = getDayIndexFromDate(date);
+                setActiveDayIndex(newDayIndex);
+              }}
             />
             {/* Page 1 Footer (Print Only) */}
             <div className="hidden print:flex mt-auto pt-8 justify-between text-[10px] text-gray-400 uppercase font-bold border-t border-gray-100">

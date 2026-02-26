@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { WelcomeHeader } from '@/components/ui/WelcomeHeader';
 
 interface BookletContainerProps {
   children: React.ReactNode[];
@@ -38,6 +39,7 @@ export function BookletContainer({ children, onBack }: BookletContainerProps) {
 
   return (
     <div className="flex flex-col items-center min-h-screen py-6 px-4 bg-slate-200">
+      <WelcomeHeader />
       {/* Navigation Header */}
       <div className="w-full max-w-4xl flex justify-between items-center mb-6 print:hidden">
         <Button 

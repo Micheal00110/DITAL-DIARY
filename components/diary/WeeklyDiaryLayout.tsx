@@ -11,7 +11,7 @@ import { WeeklyScheduleEntry } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, CheckCircle2 } from 'lucide-react';
+import { Plus, CheckCircle2, Calendar } from 'lucide-react';
 import { COLORS, FONTS, UTILS } from '@/lib/styles';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -70,6 +70,8 @@ interface WeeklyDiaryLayoutProps {
   onWeekChange?: (week: number) => void;
   onDateChange?: (date: string) => void;
   singleDayView?: boolean;
+  initialDayIndex?: number;
+  initialDate?: string;
 }
 
 export function WeeklyDiaryLayout({
@@ -80,12 +82,127 @@ export function WeeklyDiaryLayout({
   onAddEntry,
   onTermChange,
   onWeekChange,
+  onDateChange,
+  initialDayIndex = 0,
+  initialDate = '',
 }: WeeklyDiaryLayoutProps) {
-  const [activeDayIndex, setActiveDayIndex] = useState(0);
+  const [activeDayIndex, setActiveDayIndex] = useState(initialDayIndex);
   const [activeSubjectIndex, setActiveSubjectIndex] = useState(0);
   const [pendingTeacher, setPendingTeacher] = useState<Record<string, string>>({});
   const [pendingParent, setPendingParent] = useState<Record<string, string>>({});
+  const [selectedDate, setSelectedDate] = useState(initialDate || new Date().toISOString().split('T')[0]);
+  const [todayDate, setTodayDate] = useState(() => new Date().toISOString().split('T')[0]);
 
+  // Sync with today's date every minute
+  useEffect(() => {
+    const updateToday = () => setTodayDate(new Date().toISOString().split('T')[0]);
+    updateToday();
+    const interval = setInterval(updateToday, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Generate date options for dropdown (30 days before and after current date)
+  const generateDateOptions = () => {
+    const options: { value: string; label: string; dayIndex: number }[] = [];
+    const currentDate = new Date(selectedDate);
+    
+    // Generate 30 days before and after
+    for (let i = -30; i <= 30; i++) {
+      const date = new Date(currentDate);
+      date.setDate(currentDate.getDate() + i);
+      
+      const dateStr = date.toISOString().split('T')[0];
+      const dayIndex = date.getDay();
+      const adjustedDayIndex = dayIndex === 0 ? 6 : dayIndex - 1; // Monday=0
+      
+      const dayName = DAYS_OF_WEEK[adjustedDayIndex]?.split(' - ')[0] || 'Unknown';
+      const label = date.toLocaleDateString('en-US', { 
+        weekday: 'short', 
+        month: 'short', 
+        day: 'numeric',
+        year: 'numeric'
+      });
+      
+      options.push({
+        value: dateStr,
+        label: `${dayName} - ${label}`,
+        dayIndex: adjustedDayIndex
+      });
+    }
+    
+    // Filter out duplicates by date value
+    const seen = new Set<string>();
+    const filtered = options.filter(opt => {
+      if (seen.has(opt.value)) return false;
+      seen.add(opt.value);
+      return true;
+    });
+    
+    return filtered.sort((a, b) => a.value.localeCompare(b.value));
+  };
+
+  // Helper function to get day index from date
+  const getDayIndexFromDate = (dateString: string): number => {
+    if (!dateString) return 0;
+    const date = new Date(dateString);
+    const dayIndex = date.getDay(); // 0=Sunday, 1=Monday...
+    // Adjust to Monday=0, Tuesday=1, etc.
+    return dayIndex === 0 ? 6 : dayIndex - 1;
+  };
+
+  // Helper function to get date for a specific day
+  const getDateForDay = (dayIndex: number, baseDate?: string): string => {
+    // If no base date, use current date and adjust to the target day
+    const base = baseDate ? new Date(baseDate) : new Date();
+    
+    // Get the current day of week (0=Sunday, 1=Monday, etc.)
+    const currentDayIndex = base.getDay();
+    // Adjust to Monday=0, Tuesday=1, ..., Sunday=6
+    const adjustedCurrentDay = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
+    
+    // Calculate the difference to get to the target day
+    let dayDiff = dayIndex - adjustedCurrentDay;
+    
+    // Handle wrapping to previous/next week
+    const targetDate = new Date(base);
+    targetDate.setDate(base.getDate() + dayDiff);
+    
+    return targetDate.toISOString().split('T')[0]; // YYYY-MM-DD format
+  };
+
+  // Handle date selection from dropdown
+  const handleDateSelect = (dateValue: string, dayIndex: number) => {
+    setSelectedDate(dateValue);
+    setActiveDayIndex(dayIndex);
+    
+    if (onDateChange) {
+      onDateChange(dateValue);
+    }
+  };
+
+  // Handle day change and update date
+  const handleDayChange = (newDayIndex: number) => {
+    console.log('Day changed to:', newDayIndex, 'Current date:', initialDate);
+    setActiveDayIndex(newDayIndex);
+    
+    // Update date when day changes
+    if (onDateChange) {
+      const newDate = getDateForDay(newDayIndex, selectedDate);
+      setSelectedDate(newDate);
+      console.log('New calculated date:', newDate);
+      onDateChange(newDate);
+    }
+  };
+
+  // Sync selectedDate with activeDayIndex
+  useEffect(() => {
+    if (selectedDate) {
+      const dayIndex = getDayIndexFromDate(selectedDate);
+      setActiveDayIndex(dayIndex);
+    }
+  }, [selectedDate]);
+
+  // Auto-update day index when date changes
   useEffect(() => {
     setActiveSubjectIndex(0);
   }, [activeDayIndex]);
@@ -158,84 +275,52 @@ export function WeeklyDiaryLayout({
             <div className="mb-4 sm:mb-6 md:mb-8 flex flex-col sm:flex-row sm:justify-between sm:items-baseline border-b-2 border-dotted border-blue-200 pb-2 sm:pb-3 md:pb-4 gap-2 sm:gap-3 md:gap-4">
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                 {(() => {
-                  const firstDate = entries.find(e => e.date)?.date;
+                  const firstDate = entries.find(e => e.date)?.date || selectedDate;
                   const calc = getTermAndWeekFromDate(firstDate || '');
                   const displayTerm = firstDate ? calc.term : 'Term One';
                   const displayWeek = firstDate ? calc.week : 1;
+                  const currentDate = getDateForDay(activeDayIndex, firstDate);
+                  const dateOptions = generateDateOptions();
                   
                   return (
                     <>
-                      {editable && onTermChange ? (
+                      {/* Date Picker Dropdown */}
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-blue-600" />
                         <select
-                          value={TERM_OPTIONS.includes(displayTerm as any) ? displayTerm : 'Term One'}
-                          onChange={(e) => onTermChange(e.target.value)}
-                          className="bg-blue-50/50 px-2 sm:px-3 py-1 rounded-lg border-b-2 border-blue-900/30 focus:outline-none focus:border-blue-900 cursor-pointer text-xs sm:text-sm md:text-base font-bold text-blue-900"
-                        >
-                          {TERM_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
-                        </select>
-                      ) : (
-                        <h2 className="font-black text-blue-900 text-sm sm:text-base md:text-lg">{displayTerm}</h2>
-                      )}
-                      
-                      {editable && onWeekChange ? (
-                        <select
-                          value={WEEK_OPTIONS[displayWeek - 1] || 'Week One'}
+                          value={selectedDate}
                           onChange={(e) => {
-                            const idx = WEEK_OPTIONS.indexOf(e.target.value as any);
-                            if (idx !== -1) onWeekChange(idx + 1);
+                            const selectedOption = dateOptions.find(opt => opt.value === e.target.value);
+                            if (selectedOption) {
+                              handleDateSelect(selectedOption.value, selectedOption.dayIndex);
+                            }
                           }}
-                          className="bg-blue-50/50 px-2 sm:px-3 py-1 rounded-lg border-b-2 border-blue-900/30 focus:outline-none focus:border-blue-900 cursor-pointer text-xs sm:text-sm md:text-base font-bold text-blue-900"
+                          className="text-xs sm:text-sm font-black text-blue-600 bg-blue-50 px-2 py-1 rounded-lg border border-blue-200 focus:outline-none focus:border-blue-500 cursor-pointer"
                         >
-                          {WEEK_OPTIONS.map(w => <option key={w} value={w}>{w}</option>)}
+                          {dateOptions.map(option => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
                         </select>
-                      ) : (
-                        <h3 className="text-blue-900/70 text-xs sm:text-sm md:text-base font-bold">- Week {displayWeek}</h3>
-                      )}
+                      </div>
+                      
+                      {/* Current Date Display - Always shows today's date */}
+                      <div className="text-xs sm:text-sm font-black text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
+                        {todayDate ? new Date(todayDate).toLocaleDateString('en-US', { 
+                          weekday: 'short', 
+                          month: 'short', 
+                          day: 'numeric' 
+                        }) : 'No date'}
+                      </div>
+                      
+                      <h2 className="font-black text-blue-900 text-sm sm:text-base md:text-lg">{displayTerm}</h2>
+                      
+                      <h3 className="text-blue-900/70 text-xs sm:text-sm md:text-base font-bold">- Week {displayWeek}</h3>
                     </>
                   );
                 })()}
               </div>
-            </div>
-
-            {/* Day Tabs */}
-            <div className="mb-4 sm:mb-6 flex items-center gap-1 sm:gap-2 overflow-x-auto pb-2 no-scrollbar border-b border-blue-50">
-              {DAYS_OF_WEEK.slice(0, visibleDays).map((dayName, idx) => {
-                const isActive = activeDayIndex === idx;
-                const dayShort = dayName.split(" - ")[0].substring(0, 3);
-                return (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveDayIndex(idx)}
-                    className={`relative px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-xs md:text-sm font-black transition-all duration-300 min-w-[65px] sm:min-w-[75px] md:min-w-[85px] uppercase tracking-wider flex-shrink-0
-                      ${isActive ? 'text-white bg-blue-900 shadow-md' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
-                  >
-                    {dayShort}
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeDayGlow"
-                        className="absolute inset-0 bg-blue-400/20 blur-md rounded-lg sm:rounded-xl -z-10"
-                        initial={false}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      />
-                    )}
-                  </button>
-                );
-              })}
-              
-              {visibleDays < DAYS_OF_WEEK.length && (
-                <button
-                  onClick={() => {
-                    const next = DAYS_OF_WEEK[visibleDays].split(" - ")[0].toUpperCase();
-                    if (onAddEntry) onAddEntry(next);
-                    else if (onAdd) onAdd();
-                    setActiveDayIndex(visibleDays);
-                  }}
-                  className="px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-xs md:text-sm font-black text-emerald-600 hover:bg-emerald-50 transition-all border-2 border-dashed border-emerald-100 flex items-center gap-1 whitespace-nowrap flex-shrink-0"
-                >
-                  <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                  <span className="hidden sm:inline">ADD</span>
-                </button>
-              )}
             </div>
 
             {/* Content */}

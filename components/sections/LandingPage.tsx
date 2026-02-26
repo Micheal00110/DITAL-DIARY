@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ModalAnimation } from '@/components/ui/modal-animation';
 import { Eye, LogIn } from 'lucide-react';
+import { WelcomeHeader } from '@/components/ui/WelcomeHeader';
 
 interface LandingPageProps {
   onPreview: () => void;
@@ -23,6 +24,7 @@ export function LandingPage({ onPreview, onOpenDiary }: LandingPageProps) {
   if (showForm) {
     return (
       <ModalAnimation>
+        <WelcomeHeader />
         <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-blue-50 to-white flex items-center justify-center p-4">
           <div className="max-w-4xl w-full">
             <div className="text-center mb-8">
